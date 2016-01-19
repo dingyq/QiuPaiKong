@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<array>
+		<dict>
+			<key>CellImage</key>
+			<string>me_tip_message.png</string>
+			<key>CellTitle</key>
+			<string>消息</string>
+			<key>ViewController</key>
+			<string>MessageViewController</string>
+		</dict>
+		<dict>
+			<key>CellImage</key>
+			<string>me_tip_home.png</string>
+			<key>CellTitle</key>
+			<string>我的主页</string>
+			<key>ViewController</key>
+			<string>HomePageViewController</string>
+		</dict>
+	</array>
+	<array>
+		<dict>
+			<key>CellImage</key>
+			<string>me_tip_like.png</string>
+			<key>CellTitle</key>
+			<string>我收藏的</string>
+			<key>ViewController</key>
+			<string>MyLikeViewController</string>
+		</dict>
+	</array>
+	<array>
+		<dict>
+			<key>CellImage</key>
+			<string>me_tip_myinfo.png</string>
+			<key>CellTitle</key>
+			<string>我的资料</string>
+			<key>ViewController</key>
+			<string>MyInfomationViewController</string>
+		</dict>
+		<dict>
+			<key>CellImage</key>
+			<string>me_tip_set.png</string>
+			<key>CellTitle</key>
+			<string>设置</string>
+			<key>ViewController</key>
+			<string>SettingViewController</string>
+		</dict>
+	</array>
+</array>
+</plist>

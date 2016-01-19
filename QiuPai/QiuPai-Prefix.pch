@@ -1,0 +1,50 @@
+//
+//  QiuPai-Prefix.pch
+//  QiuPai
+//
+//  Created by bigqiang on 15/11/3.
+//  Copyright © 2015年 barbecue. All rights reserved.
+//
+
+#ifndef QiuPai_Prefix_pch
+#define QiuPai_Prefix_pch
+
+// Include any system framework and library headers here that should be included in all compilation units.
+// You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+
+
+#import "SDImageCache.h"
+#import "AFNetworking.h"
+#import "UIKit+AFNetworking.h"
+#import "NetWorkDelegate.h"
+#import "FMDB.h"
+#import "HttpRequestManager.h"
+#import "JSONKit.h"
+#import "MJRefresh.h"
+#import "Masonry.h"
+
+#import "utilityVar.h"
+#import "Helper.h"
+#import "NSDate+DateFormatter.h"
+#import "DDNavigationController.h"
+#import "DDActivityIndicatorView.h"
+#import "DDAlertView.h"
+#import "NoDataTipView.h"
+#import "BadNetTipView.h"
+#import "MBProgressHUD.h"
+#import "BaseViewController.h"
+#import "BaseTableViewController.h"
+#import "AutoResizeLabel.h"
+#import "QiuPaiUserModel.h"
+#import "MobClick.h"
+#import <TencentOpenAPI/TencentOAuth.h>
+#import <TencentOpenAPI/QQApiInterface.h>
+#import <TencentOpenAPI/QQApiInterfaceObject.h>
+#import "QQHelper.h"
+#import "QQSdkCall.h"
+
+#import "WXApiManager.h"
+#import "WXApiRequestHandler.h"
+
+
+#endif /* QiuPai_Prefix_pch */
