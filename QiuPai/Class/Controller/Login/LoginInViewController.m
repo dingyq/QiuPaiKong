@@ -31,15 +31,15 @@
     UIBarButtonItem *leftBarItem = [[UIBarButtonItem alloc] initWithCustomView:backBtn];
     self.navigationItem.leftBarButtonItem = leftBarItem;
     
-    UIButton *registerBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [registerBtn setFrame:CGRectMake(0, 0, 40, 25)];
-    [registerBtn setTitle:@"注册" forState:UIControlStateNormal];
-    registerBtn.titleLabel.font = [UIFont systemFontOfSize:14.0f];
-    [registerBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [registerBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
-    [registerBtn addTarget:self action:@selector(registerBtnClick:) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithCustomView:registerBtn];
-    self.navigationItem.rightBarButtonItem = rightItem;
+//    UIButton *registerBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+//    [registerBtn setFrame:CGRectMake(0, 0, 40, 25)];
+//    [registerBtn setTitle:@"注册" forState:UIControlStateNormal];
+//    registerBtn.titleLabel.font = [UIFont systemFontOfSize:14.0f];
+//    [registerBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+//    [registerBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
+//    [registerBtn addTarget:self action:@selector(registerBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+//    UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithCustomView:registerBtn];
+//    self.navigationItem.rightBarButtonItem = rightItem;
     
     [self initThirdLoginView];
     [WXApiManager sharedManager].delegate = self;
