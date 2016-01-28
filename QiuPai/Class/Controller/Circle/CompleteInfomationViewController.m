@@ -29,17 +29,17 @@ typedef NS_ENUM(NSInteger, PickerType) {
     Step2CallBackBlock _step2CallBack;
     PickerType _pickerType;
     
-    NSInteger _sex;             //性别1男2女
+//    NSInteger _sex;             //性别0男1女
 //    NSInteger _bornYear;        //出生年份
 //    NSInteger _height;          //身高(cm)
 //    NSInteger _weight;          //体重(kg)
 //    NSInteger _playYear;
-    NSInteger _selfEveluate;
-    NSInteger _playFreq;        //频率 1没打过 2偶尔 3 1-4次/月 4一周三次以上
-    NSInteger _powerSelfEveluate;//力量自评 1不参加 2偶尔 3一周一次 4一周三次及以上
-    NSInteger _injuries;        //伤病史 1有 2无 3不清楚
-    NSInteger _region;          //活动区域 1没打过 2全场 3网前 4底线附近 5底线后
-    NSInteger _style;           //击球风格 1没打过 2上旋 3平击
+//    NSInteger _selfEveluate;
+//    NSInteger _playFreq;        //频率 1没打过 2偶尔 3 1-4次/月 4一周三次以上
+//    NSInteger _powerSelfEveluate;//力量自评 1不参加 2偶尔 3一周一次 4一周三次及以上
+//    NSInteger _injuries;        //伤病史 1有 2无 3不清楚
+//    NSInteger _region;          //活动区域 1没打过 2全场 3网前 4底线附近 5底线后
+//    NSInteger _style;           //击球风格 1没打过 2上旋 3平击
     
     UIScrollView *_contentScrollView;
     CGFloat _contentSVHeight;
@@ -54,30 +54,66 @@ typedef NS_ENUM(NSInteger, PickerType) {
     UIView *_answerPickerView;
 }
 
-
+@property (nonatomic, assign) SexIndicator sex;        //性别0男1女
 @property (nonatomic, assign) NSInteger bornYear;        //出生年份
 @property (nonatomic, assign) NSInteger height;          //身高(cm)
 @property (nonatomic, assign) NSInteger weight;          //体重(kg)
+@property (nonatomic, assign) NSInteger selfEveluate;
+@property (nonatomic, assign) NSInteger playFreq;        //频率 1没打过 2偶尔 3 1-4次/月 4一周三次以上
+@property (nonatomic, assign) NSInteger powerSelfEveluate;//力量自评 1不参加 2偶尔 3一周一次 4一周三次及以上
+@property (nonatomic, assign) NSInteger injuries;        //伤病史 1有 2无 3不清楚
+@property (nonatomic, assign) NSInteger region;          //活动区域 1没打过 2全场 3网前 4底线附近 5底线后
+@property (nonatomic, assign) NSInteger style;           //击球风格 1没打过 2上旋 3平击
 
 @end
 
 static NSInteger ViewsCount = 4;
 
 @implementation CompleteInfomationViewController
+-(SexIndicator)sex {
+    return _sex ? _sex : SexIndicatorBoy;
+}
+
+- (NSInteger)region {
+    if (self.selfEveluate == 1) {
+        return _region;
+    }
+    return _region ? _region : 1;
+}
+
+- (NSInteger)style {
+    if (self.selfEveluate == 1) {
+        return _style;
+    }
+    return _style ? _style : 1;
+}
+
+- (NSInteger)powerSelfEveluate {
+    return _powerSelfEveluate ? _powerSelfEveluate : 1;
+}
+
+- (NSInteger)injuries {
+    return _injuries ? _injuries : 1;
+}
+
+- (NSInteger)selfEveluate {
+    return _selfEveluate ? _selfEveluate : 1;
+}
+
+- (NSInteger)playFreq {
+    return _playFreq ? _playFreq : 1;
+}
 
 - (NSInteger)bornYear {
     NSInteger year = [Helper getCurrentYear];
-    _bornYear =  year - [[QiuPaiUserModel getUserInstance].age integerValue];
     return _bornYear == year ? 1991 : _bornYear;
 }
 
 - (NSInteger)weight {
-    _weight = [[QiuPaiUserModel getUserInstance].weight integerValue];
     return _weight ? _weight : 68;
 }
 
 - (NSInteger)height {
-    _height = [[QiuPaiUserModel getUserInstance].height integerValue];
     return _height ? _height : 178;
 }
 
@@ -97,7 +133,6 @@ static NSInteger ViewsCount = 4;
     self.automaticallyAdjustsScrollViewInsets = NO;
     _contentSVHeight = kFrameHeight - 64 - 49;
     _answerPresetArr = [[NSMutableArray alloc] init];
-//    _goodsId = 10000;
     
     [self initContentScrollView];
     [self initNumPageControlView];
@@ -111,22 +146,28 @@ static NSInteger ViewsCount = 4;
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    _powerSelfEveluate = [[QiuPaiUserModel getUserInstance].powerSelfEveluate integerValue];
+    _style = [[QiuPaiUserModel getUserInstance].style integerValue];
+    _sex = [[QiuPaiUserModel getUserInstance].sex integerValue];
+    _region = [[QiuPaiUserModel getUserInstance].region integerValue];
+    _injuries = [[QiuPaiUserModel getUserInstance].injuries integerValue];
+    _selfEveluate = [[QiuPaiUserModel getUserInstance].selfEveluate integerValue];
+    _playFreq = [[QiuPaiUserModel getUserInstance].playFreq integerValue];
+    NSInteger year = [Helper getCurrentYear];
+    _bornYear =  year - [[QiuPaiUserModel getUserInstance].age integerValue];
+    _weight = [[QiuPaiUserModel getUserInstance].weight integerValue];
+    _height = [[QiuPaiUserModel getUserInstance].height integerValue];
+    
     // stage1
-    [_sexChooseView resetSexBtn:[[QiuPaiUserModel getUserInstance].sex integerValue]];
+    [_sexChooseView resetSexBtn:self.sex];
     // stage2
     [_stage2View resetView:self.bornYear height:self.height weight:self.weight];
     // stage3
-    _selfEveluate = [[QiuPaiUserModel getUserInstance].selfEveluate integerValue];
-    _playFreq = [[QiuPaiUserModel getUserInstance].playFreq integerValue];
-    [_stage3View resetView:_selfEveluate playFreq:_playFreq];
+    [_stage3View resetView:self.selfEveluate playFreq:self.playFreq];
     // stage4
-    _powerSelfEveluate = [[QiuPaiUserModel getUserInstance].powerSelfEveluate integerValue];
-    _injuries = [[QiuPaiUserModel getUserInstance].injuries integerValue];
-    [_stage4View resetView:_powerSelfEveluate injuries:_injuries];
+    [_stage4View resetView:self.powerSelfEveluate injuries:self.injuries];
     // stage5
-    _region = [[QiuPaiUserModel getUserInstance].region integerValue];
-    _style = [[QiuPaiUserModel getUserInstance].style integerValue];
-    [_stage5View resetView:_region style:_style];
+    [_stage5View resetView:self.region style:self.style];
 }
 
 - (void)backBtnClick:(UIButton *)sender {
@@ -425,16 +466,16 @@ static NSInteger ViewsCount = 4;
 - (void)sendCompleteUserInfomationRequest {
     NSMutableDictionary *paramDic = [[NSMutableDictionary alloc] init];
     [paramDic setObject:[NSNumber numberWithInteger:_goodsId] forKey:@"racId"];
-    [paramDic setObject:[NSNumber numberWithInteger:_sex] forKey:@"sex"];
-    [paramDic setObject:[NSNumber numberWithInteger:_bornYear] forKey:@"bornYear"];
-    [paramDic setObject:[NSNumber numberWithInteger:_weight] forKey:@"weight"];
-    [paramDic setObject:[NSNumber numberWithInteger:_height] forKey:@"height"];
-    [paramDic setObject:[NSNumber numberWithInteger:_selfEveluate] forKey:@"selfEveluate"];
-    [paramDic setObject:[NSNumber numberWithInteger:_playFreq] forKey:@"playFreq"];
-    [paramDic setObject:[NSNumber numberWithInteger:_powerSelfEveluate] forKey:@"powerSelfEveluate"];
-    [paramDic setObject:[NSNumber numberWithInteger:_injuries] forKey:@"injuries"];
-    [paramDic setObject:[NSNumber numberWithInteger:_region] forKey:@"region"];
-    [paramDic setObject:[NSNumber numberWithInteger:_style] forKey:@"style"];
+    [paramDic setObject:[NSNumber numberWithInteger:self.sex] forKey:@"sex"];
+    [paramDic setObject:[NSNumber numberWithInteger:self.bornYear] forKey:@"bornYear"];
+    [paramDic setObject:[NSNumber numberWithInteger:self.weight] forKey:@"weight"];
+    [paramDic setObject:[NSNumber numberWithInteger:self.height] forKey:@"height"];
+    [paramDic setObject:[NSNumber numberWithInteger:self.selfEveluate] forKey:@"selfEveluate"];
+    [paramDic setObject:[NSNumber numberWithInteger:self.playFreq] forKey:@"playFreq"];
+    [paramDic setObject:[NSNumber numberWithInteger:self.powerSelfEveluate] forKey:@"powerSelfEveluate"];
+    [paramDic setObject:[NSNumber numberWithInteger:self.injuries] forKey:@"injuries"];
+    [paramDic setObject:[NSNumber numberWithInteger:self.region] forKey:@"region"];
+    [paramDic setObject:[NSNumber numberWithInteger:self.style] forKey:@"style"];
     
     // 预留字段
     [paramDic setObject:[QiuPaiUserModel getUserInstance].age forKey:@"age"];
@@ -470,7 +511,7 @@ static NSInteger ViewsCount = 4;
         [_numPageControl setCurrentPage:_footerToolBar.currentStep];
     }
     if (_footerToolBar.currentStep == 3) {
-        if (_selfEveluate && _selfEveluate != 1) {
+        if (self.selfEveluate && self.selfEveluate != 1) {
             // 非初学者
             ViewsCount = 5;
             _footerToolBar.numberOfStep = ViewsCount;
@@ -506,6 +547,18 @@ static NSInteger ViewsCount = 4;
         if ([[dic objectForKey:@"statusCode"] integerValue] == NetWorkJsonResOK) {
             NSDictionary *dataDic = [dic objectForKey:@"returnData"];
             [QiuPaiUserModel getUserInstance].report = [dataDic objectForKey:@"report"];
+            [QiuPaiUserModel getUserInstance].sex = @(self.sex);
+            [QiuPaiUserModel getUserInstance].powerSelfEveluate  = @(self.powerSelfEveluate);
+            [QiuPaiUserModel getUserInstance].style = @(self.style);
+            [QiuPaiUserModel getUserInstance].region = @(self.region);
+            [QiuPaiUserModel getUserInstance].injuries = @(self.injuries);
+            [QiuPaiUserModel getUserInstance].selfEveluate = @(self.selfEveluate);
+            [QiuPaiUserModel getUserInstance].playFreq = @(self.playFreq);
+            [QiuPaiUserModel getUserInstance].weight = @(self.weight);
+            [QiuPaiUserModel getUserInstance].height = @(self.height);
+            NSInteger year = [Helper getCurrentYear];
+            [QiuPaiUserModel getUserInstance].age = @(year - self.bornYear);
+
             UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"" message:@"试打资料完善成功" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
             [alertView show];
         } else {

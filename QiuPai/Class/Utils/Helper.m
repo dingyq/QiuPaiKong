@@ -51,6 +51,8 @@
     if (isShow) {
         [shareConfig addObject:@{@"name":@"空间", @"image":@"share_tip_qzone.png"}];
     }
+    [shareConfig addObject:@{@"name":@"微博", @"image":@"share_tip_wb"}];
+    
     ShareSheetView *tmpView = [[ShareSheetView alloc] initWithTitleAndIcons:shareConfig];
     [tmpView showActionSheetWithClickBlock:^(NSInteger btnIndex){
         clickHandler(btnIndex);
@@ -94,7 +96,7 @@
 }
 
 //指定宽度按比例缩放
-+ (UIImage *)imageCompressForWidth:(UIImage *)sourceImage targetWidth:(CGFloat)defineWidth{
++ (UIImage *)imageCompressForWidth:(UIImage *)sourceImage targetWidth:(CGFloat)defineWidth {
     UIImage *newImage = nil;
     CGSize imageSize = sourceImage.size;
     CGFloat width = imageSize.width;
@@ -351,6 +353,9 @@
         case ShareScene_QZone:
             event = kEventQQShareQZone;
             break;
+        case ShareScene_Weibo:
+            event = kEventWeiboShare;
+            break;
         default:
             break;
     }
@@ -419,5 +424,46 @@
     return image;
 }
 
+//身份证号
++ (BOOL)validateIdentityCard:(NSString *)identityCard {
+    BOOL flag;
+    if (identityCard.length <= 0) {
+        flag = NO;
+        return flag;
+    }
+    NSString *regex2 = @"^(\\d{14}|\\d{17})(\\d|[xX])$";
+    NSPredicate *identityCardPredicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",regex2];
+    return [identityCardPredicate evaluateWithObject:identityCard];
+}
+
+//手机号码验证
++ (BOOL)validateMobile:(NSString *)mobile {
+    //手机号以13， 15，18开头，八个 \d 数字字符
+//    NSString *phoneRegex = @"^((13[0-9])|(15[^4,\\D])|(18[0,0-9]))\\d{8}$";
+    NSString *phoneRegex = @"^1[3|4|5|6|7|8|9][0-9]\\d{8}$";
+    NSPredicate *phoneTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",phoneRegex];
+    return [phoneTest evaluateWithObject:mobile];
+}
+
++ (BOOL)validateMobileCode:(NSString *)mobile {
+    NSString *phoneRegex = @"^\\d{6}$";
+    NSPredicate *phoneTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",phoneRegex];
+    return [phoneTest evaluateWithObject:mobile];
+}
+
+//昵称
++ (BOOL)validateNickname:(NSString *)nickname {
+    NSString *nicknameRegex = @"^[\u4e00-\u9fa5]{4,8}$";
+    NSPredicate *passWordPredicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",nicknameRegex];
+    return [passWordPredicate evaluateWithObject:nickname];
+}
+
+//用户名
++ (BOOL)validateUserName:(NSString *)name {
+    NSString *userNameRegex = @"^[A-Za-z0-9]{6,20}+$";
+    NSPredicate *userNamePredicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",userNameRegex];
+    BOOL B = [userNamePredicate evaluateWithObject:name];
+    return B;
+}
 
 @end

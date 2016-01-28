@@ -34,11 +34,14 @@
 @property (nonatomic, assign) NSInteger isLike;
 @property (nonatomic, assign) NSInteger shareNum;
 @property (nonatomic, assign) NSInteger evaluateNum;
+@property (nonatomic, assign) CGFloat swiWeight;
 
 @property (nonatomic, assign) CGFloat dia;
 @property (nonatomic, copy) NSString *material;  // 材料
 @property (nonatomic, copy) NSString *structure; // 结构
 @property (nonatomic, copy) NSString *character; // 特性
+
+@property (nonatomic, assign) NSInteger isJunior;
 
 - (instancetype)initWithAttributes:(NSDictionary *)attributes;
 

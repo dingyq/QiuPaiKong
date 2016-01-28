@@ -67,7 +67,7 @@
         case RequestID_PublishNewEvaluation:
         case RequestID_UploadImage:
         case RequestID_SendUserCollect:
-        case RequestID_SendUserShare:
+//        case RequestID_SendUserShare:
         case RequestID_SendUserAttention:
         case RequestID_GetUserListRelatedWithMe:
         case RequestID_GetCommentAndPraised:
@@ -111,8 +111,9 @@
         self.httpOperation = [_manager POST:requestInfo.urlStr parameters:jsonDict success:^(AFHTTPRequestOperation *operation, id responseObject) {
             NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:operation.responseData options:0 error:nil];
             if ([[dic objectForKey:@"statusCode"] integerValue] == NetWorkAuthKeyExpr) {
+                [QiuPaiUserModel getUserInstance].isTimeOut = YES;
                 [[QiuPaiUserModel getUserInstance] showUserLoginVC];
-                return ;
+                return;
             }
             NSLog(@"dic is %@", dic);
             [requestInfo.delegate netWorkFinishedCallBack:dic withRequestID:requestInfo.requestID];
@@ -431,6 +432,37 @@
     return info;
 }
 
+
++ (RequestInfo *)findPwdBack:(NSDictionary *)requestInfo {
+    RequestInfo *info = [[RequestInfo alloc]init];
+    info.jsonDict = [[NSMutableDictionary alloc] initWithDictionary:requestInfo];
+    [info.jsonDict setObject:[NSNumber numberWithInteger:0x100a] forKey:@"cmd"];
+    info.method = HttpRequestMethod_POST;
+    info.requestID = RequestID_FindPwdBack;
+    [[HttpRequestManager shareManager] startAsyncHttpRequestWithRequestInfo:info];
+    return info;
+}
+
++ (RequestInfo *)modifyPwd:(NSDictionary *)requestInfo {
+    RequestInfo *info = [[RequestInfo alloc]init];
+    info.jsonDict = [[NSMutableDictionary alloc] initWithDictionary:requestInfo];
+    [info.jsonDict setObject:[NSNumber numberWithInteger:0x1009] forKey:@"cmd"];
+    info.method = HttpRequestMethod_POST;
+    info.requestID = RequestID_ModifyPwd;
+    [[HttpRequestManager shareManager] startAsyncHttpRequestWithRequestInfo:info];
+    return info;
+}
+
++ (RequestInfo *)getMobileAuthCode:(NSDictionary *)requestInfo {
+    RequestInfo *info = [[RequestInfo alloc]init];
+    info.jsonDict = [[NSMutableDictionary alloc] initWithDictionary:requestInfo];
+    [info.jsonDict setObject:[NSNumber numberWithInteger:0x1008] forKey:@"cmd"];
+    info.method = HttpRequestMethod_POST;
+    info.requestID = RequestID_GetMobileAuthCode;
+    [[HttpRequestManager shareManager] startAsyncHttpRequestWithRequestInfo:info];
+    return info;
+}
+
 + (RequestInfo *)getAllNewMessageTip:(NSDictionary *)requestInfo {
     RequestInfo *info = [[RequestInfo alloc]init];
     info.jsonDict = [[NSMutableDictionary alloc] initWithDictionary:requestInfo];
@@ -467,6 +499,16 @@
     [info.jsonDict setObject:[NSNumber numberWithInteger:0x1002] forKey:@"cmd"];
     info.method = HttpRequestMethod_POST;
     info.requestID = RequestID_SendUserLoginRequest;
+    [[HttpRequestManager shareManager] startAsyncHttpRequestWithRequestInfo:info];
+    return info;
+}
+
++ (RequestInfo *)sendUserRegisterRequest:(NSDictionary *)requestInfo {
+    RequestInfo *info = [[RequestInfo alloc]init];
+    info.jsonDict = [[NSMutableDictionary alloc] initWithDictionary:requestInfo];
+    [info.jsonDict setObject:[NSNumber numberWithInteger:0x1001] forKey:@"cmd"];
+    info.method = HttpRequestMethod_POST;
+    info.requestID = RequestID_SendUserRegisterRequest;
     [[HttpRequestManager shareManager] startAsyncHttpRequestWithRequestInfo:info];
     return info;
 }

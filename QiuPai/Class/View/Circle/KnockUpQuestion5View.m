@@ -132,9 +132,10 @@
 
 - (void)resetView:(NSInteger)region style:(NSInteger)style {
     NSArray *btnsArr = [_regionView subviews];
+    region = (region > 0 && region < 4) ? region : 1;
+//    [self.myDelegate regionChooseDone:region];
     for (UIButton *btn in btnsArr) {
         if ([NSStringFromClass([btn class]) isEqualToString:NSStringFromClass([UIButton class])]) {
-            region = (region > 0 && region < 4) ? region : 1;
             if (btn.tag == region*100) {
                 [btn setSelected:YES];
                 [btn setBackgroundColor:CustomGreenColor];
@@ -146,9 +147,10 @@
     }
     
     NSArray *btnsArr1 = [_styleView subviews];
+    style = (style > 0 && style < 3) ? style : 1;
+//    [self.myDelegate styleChooseDone:style];
     for (UIButton *btn in btnsArr1) {
         if ([NSStringFromClass([btn class]) isEqualToString:NSStringFromClass([UIButton class])]) {
-            style = (style > 0 && style < 3) ? style : 1;
             if (btn.tag == style*100) {
                 [btn setSelected:YES];
                 [btn setBackgroundColor:CustomGreenColor];

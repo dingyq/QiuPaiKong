@@ -52,12 +52,11 @@ static const CGFloat HeadImageViewHeight = 139;
         [self getAllNewMessage];
         [self getUserInfo];
     } else if(_isFirstLoad) {
-        _isFirstLoad = NO;
         [[QiuPaiUserModel getUserInstance] showUserLoginVC];
     }
-    
     [self updateUserHeaderView];
     [self updateNaviBarView];
+    _isFirstLoad = NO;
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -124,14 +123,19 @@ static const CGFloat HeadImageViewHeight = 139;
 }
 
 - (void)initDetailTableView {
-    _detailTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, HeadImageViewHeight + 56, kFrameWidth, kFrameHeight - HeadImageViewHeight - 56) style:UITableViewStylePlain];
+    _detailTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, HeadImageViewHeight + 56, kFrameWidth, kFrameHeight - HeadImageViewHeight - 56 - 49) style:UITableViewStylePlain];
     [_detailTableView setDelegate:self];
     [_detailTableView setDataSource:self];
-    self.automaticallyAdjustsScrollViewInsets = NO;
-
     [_detailTableView setBackgroundColor:Gray240Color];
     [_detailTableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     [self.view addSubview:_detailTableView];
+    self.automaticallyAdjustsScrollViewInsets = NO;
+    [_detailTableView mas_makeConstraints:^(MASConstraintMaker *make){
+        make.left.equalTo(@0);
+        make.top.equalTo(@(HeadImageViewHeight + 56));
+        make.width.equalTo(@(kFrameWidth));
+        make.height.equalTo(@(kFrameHeight - HeadImageViewHeight - 56 - 49));
+    }];
     
     UIView *view =[ [UIView alloc]init];
     view.backgroundColor = [UIColor clearColor];
@@ -144,14 +148,16 @@ static const CGFloat HeadImageViewHeight = 139;
 }
 
 - (void)updateUserHeaderView {
-    [_headerView setHeadViewImage:[QiuPaiUserModel getUserInstance].headPic];
-    [_headerView setNameLabelText:[QiuPaiUserModel getUserInstance].nick];
-    [_headerView setSexImageTip:[[QiuPaiUserModel getUserInstance].sex integerValue]];
-    [_headerView setAgeLabelText:[NSString stringWithFormat:@"%@岁", [[QiuPaiUserModel getUserInstance].age stringValue]]];
-    [_headerView setRacketLabelText:[QiuPaiUserModel getUserInstance].racquet];
-    [_headerView setOtherInfoLabelText:[[QiuPaiUserModel getUserInstance].lvEevaluate stringValue]];
-    
-    [_headerView setLoginState:![QiuPaiUserModel getUserInstance].isTimeOut];
+    BOOL isTimeOut = [QiuPaiUserModel getUserInstance].isTimeOut;
+    if (!isTimeOut) {
+        [_headerView setHeadViewImage:[QiuPaiUserModel getUserInstance].headPic];
+        [_headerView setNameLabelText:[QiuPaiUserModel getUserInstance].nick];
+        [_headerView setSexImageTip:[[QiuPaiUserModel getUserInstance].sex integerValue]];
+        [_headerView setAgeLabelText:[NSString stringWithFormat:@"%@岁", [[QiuPaiUserModel getUserInstance].age stringValue]]];
+        [_headerView setRacketLabelText:[QiuPaiUserModel getUserInstance].racquet];
+        [_headerView setOtherInfoLabelText:[[QiuPaiUserModel getUserInstance].lvEevaluate stringValue]];
+    }
+    [_headerView setLoginState:!isTimeOut];
 }
 
 - (void)initNaviBarView {
@@ -160,7 +166,7 @@ static const CGFloat HeadImageViewHeight = 139;
     [_naviBarView setBackgroundColor:Gray240Color];
     [self.view addSubview:_naviBarView];
     
-    NaviBarCustomButton *attentionBtn = [[NaviBarCustomButton alloc] initWithFrame:CGRectMake(0, 0, kFrameWidth/3-1, naviToolHeight) numTip:@"23" tipTitle:@"关注"];
+    NaviBarCustomButton *attentionBtn = [[NaviBarCustomButton alloc] initWithFrame:CGRectMake(0, 0, kFrameWidth/3-1, naviToolHeight) numTip:@"-" tipTitle:@"关注"];
     [attentionBtn setBackgroundColor:[UIColor whiteColor]];
     [attentionBtn setTitleColor:Gray51Color forState:UIControlStateNormal];
     [attentionBtn setTitleColor:Gray51Color forState:UIControlStateHighlighted];
@@ -169,7 +175,7 @@ static const CGFloat HeadImageViewHeight = 139;
     [attentionBtn addTarget:self action:@selector(attentionBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     [_naviBarView addSubview:attentionBtn];
     
-    NaviBarCustomButton *fansBtn = [[NaviBarCustomButton alloc] initWithFrame:CGRectMake(kFrameWidth/3, 0, kFrameWidth/3-1, naviToolHeight) numTip:@"23" tipTitle:@"粉丝"];
+    NaviBarCustomButton *fansBtn = [[NaviBarCustomButton alloc] initWithFrame:CGRectMake(kFrameWidth/3, 0, kFrameWidth/3-1, naviToolHeight) numTip:@"-" tipTitle:@"粉丝"];
     [fansBtn setBackgroundColor:[UIColor whiteColor]];
     [fansBtn setTitleColor:Gray51Color forState:UIControlStateNormal];
     [fansBtn setTitleColor:Gray51Color forState:UIControlStateHighlighted];
@@ -178,7 +184,7 @@ static const CGFloat HeadImageViewHeight = 139;
     [fansBtn addTarget:self action:@selector(fansBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     [_naviBarView addSubview:fansBtn];
     
-    NaviBarCustomButton *jifenBtn = [[NaviBarCustomButton alloc] initWithFrame:CGRectMake(kFrameWidth*2/3, 0, kFrameWidth/3, naviToolHeight) numTip:@"23" tipTitle:@"积分"];
+    NaviBarCustomButton *jifenBtn = [[NaviBarCustomButton alloc] initWithFrame:CGRectMake(kFrameWidth*2/3, 0, kFrameWidth/3, naviToolHeight) numTip:@"-" tipTitle:@"积分"];
     [jifenBtn setBackgroundColor:[UIColor whiteColor]];
     [jifenBtn setTitleColor:Gray51Color forState:UIControlStateNormal];
     [jifenBtn setTitleColor:Gray51Color forState:UIControlStateHighlighted];
@@ -191,24 +197,27 @@ static const CGFloat HeadImageViewHeight = 139;
 }
 
 - (void)updateNaviBarView {
-    NaviBarCustomButton *attentionBtn = [_naviBarView viewWithTag:101];
     NSString *concernNnum = [[QiuPaiUserModel getUserInstance].concernNum stringValue];
-    if (!concernNnum) {
-        concernNnum = @"";
-    }
-    [attentionBtn setTitle:concernNnum];
-    
+    concernNnum = concernNnum ? concernNnum : @"";
+
     NSString *fansNum = [[QiuPaiUserModel getUserInstance].concernedNum stringValue];
-    if (!fansNum) {
-        fansNum = @"";
-    }
-    NaviBarCustomButton *fansBtn = [_naviBarView viewWithTag:102];
-    [fansBtn setTitle:fansNum];
+    fansNum = fansNum ? fansNum : @"";
     
     NSString *score = [[QiuPaiUserModel getUserInstance].score stringValue];
-    if (!score) {
-        score = @"";
+    score = score ? score : @"";
+
+    BOOL isTimeOut = [QiuPaiUserModel getUserInstance].isTimeOut;
+    if (isTimeOut) {
+        concernNnum = @"-";
+        fansNum = @"-";
+        score = @"-";
     }
+    NaviBarCustomButton *attentionBtn = [_naviBarView viewWithTag:101];
+    [attentionBtn setTitle:concernNnum];
+
+    NaviBarCustomButton *fansBtn = [_naviBarView viewWithTag:102];
+    [fansBtn setTitle:fansNum];
+
     NaviBarCustomButton *jifenBtn = [_naviBarView viewWithTag:103];
     [jifenBtn setTitle:score];
 }

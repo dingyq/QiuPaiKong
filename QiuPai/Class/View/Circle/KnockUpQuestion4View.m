@@ -99,9 +99,10 @@
 
 - (void)resetView:(NSInteger)powerSelfEvalu injuries:(NSInteger)injuries {
     NSArray *btnsArr = [_strengthPracticeView subviews];
+    powerSelfEvalu = (powerSelfEvalu > 0 && powerSelfEvalu < 4) ? powerSelfEvalu : 1;
+//    [self.myDelegate strengthPracticeChooseDone:powerSelfEvalu];
     for (UIButton *btn in btnsArr) {
         if ([NSStringFromClass([btn class]) isEqualToString:NSStringFromClass([UIButton class])]) {
-            powerSelfEvalu = (powerSelfEvalu > 0 && powerSelfEvalu < 4) ? powerSelfEvalu : 1;
             if (btn.tag == powerSelfEvalu*100) {
                 [btn setSelected:YES];
                 [btn setBackgroundColor:CustomGreenColor];
@@ -113,9 +114,10 @@
     }
     
     NSArray *btnsArr1 = [_injuryView subviews];
+    injuries = (injuries > 0 && injuries < 4) ? injuries : 1;
+//    [self.myDelegate injuryChooseDone:injuries];
     for (UIButton *btn in btnsArr1) {
         if ([NSStringFromClass([btn class]) isEqualToString:NSStringFromClass([UIButton class])]) {
-            injuries = (injuries > 0 && injuries < 4) ? injuries : 1;
             if (btn.tag == injuries*100) {
                 [btn setSelected:YES];
                 [btn setBackgroundColor:CustomGreenColor];

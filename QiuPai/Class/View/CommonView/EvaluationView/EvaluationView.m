@@ -151,7 +151,7 @@ static CGFloat imageWidth;
     }
     self.textView.text = _content;
     
-    CGRect imageViewFrame = CGRectMake(0, 0, 0, 0);
+//    CGRect imageViewFrame = CGRectMake(0, 0, 0, 0);
     for (NSNumber *numTag in _imageViewTagArr) {
         UIImageView *tmpImageView = [self viewWithTag:[numTag intValue]];
         [tmpImageView removeFromSuperview];
@@ -159,7 +159,7 @@ static CGFloat imageWidth;
     [_imageViewTagArr removeAllObjects];
     
     for (int i = 0; i < [_thumbPicArr count]; i++) {
-        imageViewFrame = [self addImageView:[_thumbPicArr objectAtIndex:i] index:i];
+        [self addImageView:[_thumbPicArr objectAtIndex:i] index:i];
     }
     
     if (circleList) {

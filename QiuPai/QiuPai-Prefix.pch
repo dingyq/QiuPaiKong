@@ -26,6 +26,7 @@
 #import "utilityVar.h"
 #import "Helper.h"
 #import "NSDate+DateFormatter.h"
+#import "NSString+MD5Addition.h"
 #import "DDNavigationController.h"
 #import "DDActivityIndicatorView.h"
 #import "DDAlertView.h"
@@ -43,8 +44,12 @@
 #import "QQHelper.h"
 #import "QQSdkCall.h"
 
+#import "WBApiManager.h"
+#import "WBApiRequestHandler.h"
+
 #import "WXApiManager.h"
 #import "WXApiRequestHandler.h"
+
 
 
 #endif /* QiuPai_Prefix_pch */

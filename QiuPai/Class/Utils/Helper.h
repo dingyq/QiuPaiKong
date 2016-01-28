@@ -36,6 +36,8 @@
 // 生成商品模板页面
 + (void)generateGoodsTemplateImage:(NSString *)name racketImageUrl:(NSString *)racketImageUrl;
 
++ (UIImage *)imageCompressForWidth:(UIImage *)sourceImage targetWidth:(CGFloat)defineWidth;
+
 // 获取图片
 +(UIImage *)bundleImageFile:(NSString *)imageName;
 
@@ -53,6 +55,22 @@
 // 解析url中字段
 + (NSString *)jiexi:(NSString *)cs webaddress:(NSString *)webAddress;
 
+// 使用颜色生成图片
 + (UIImage*)imageWithColor:(UIColor*)color;
+
+// 身份证是否合法
++ (BOOL)validateIdentityCard:(NSString *)identityCard;
+
+// 手机号是否合法
++ (BOOL)validateMobile:(NSString *)mobile;
+
+// 短信验证码是否合法
++ (BOOL)validateMobileCode:(NSString *)mobile;
+
+// 昵称是否合法
++ (BOOL)validateNickname:(NSString *)nickname;
+
+// 用户名是否合法
++ (BOOL)validateUserName:(NSString *)name;
 
 @end

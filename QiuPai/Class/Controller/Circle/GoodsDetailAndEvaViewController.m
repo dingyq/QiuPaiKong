@@ -21,7 +21,7 @@
 
 #define NAME_FONT_SIZE 14.0f
 
-@interface GoodsDetailAndEvaViewController () <CompleteInfomationSuccessDelegate, UITableViewDataSource, UITableViewDelegate, NetWorkDelegate, TableViewCellInteractionDelegate, UIAlertViewDelegate, WXApiManagerDelegate, VCInteractionDelegate> {
+@interface GoodsDetailAndEvaViewController () <CompleteInfomationSuccessDelegate, UITableViewDataSource, UITableViewDelegate, NetWorkDelegate, TableViewCellInteractionDelegate, UIAlertViewDelegate, WXApiManagerDelegate, VCInteractionDelegate, WBApiManagerDelegate> {
     UITableView *_infoDetailTV;
     UIView *_briefHeadView;
     UIView *_footerBarView;
@@ -71,6 +71,8 @@
     _uncloseHeader = [[NSMutableSet alloc] init];
 
     [WXApiManager sharedManager].delegate = self;
+    [WBApiManager sharedManager].delegate = self;
+    
     [self initBriefIntroductionHeadView];
     [self createRacketParameterTipView];
     [self initDataTableView];
@@ -93,6 +95,7 @@
 
 - (void)dealloc {
     [WXApiManager sharedManager].delegate = nil;
+    [WBApiManager sharedManager].delegate = nil;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -197,6 +200,13 @@
     _infoDetailTV.tableFooterView = footerView;
     [footerView setBackgroundColor:[UIColor clearColor]];
     
+    [_infoDetailTV mas_makeConstraints:^(MASConstraintMaker *make){
+        make.left.equalTo(@0);
+        make.top.equalTo(@144);
+        make.width.equalTo(@(kFrameWidth));
+        make.height.equalTo(@(kFrameHeight-144-49));
+    }];
+    
     [self addRefreshView:_infoDetailTV];
 }
 
@@ -239,10 +249,10 @@
             break;
         case 3:
         {
-            __weak typeof(self) _weakSelf = self;
-            [QQHelper shareImageMsg:_goodsEvaluModel.name description:_goodsEvaluModel.desc scene:QQShareScene_QZone callBack:^(QQApiSendResultCode sendResult){
-                [_weakSelf sendUserShare:UserLikeType_Goods itemId:self.goodsId];
-            }];
+            _shareScene = ShareScene_Weibo;
+            UIImage *tmpImage = [UIImage imageWithContentsOfFile:KShareImagePath];
+            NSData *imageData = UIImageJPEGRepresentation(tmpImage, 1.0);
+            [WBApiRequestHandler sendWeiboImageData:imageData];
         }
             break;
         default:
@@ -377,6 +387,13 @@
     }
     
     [self.view addSubview:_footerBarView];
+    UIView *superView = self.view;
+    [_footerBarView mas_makeConstraints:^(MASConstraintMaker *make){
+        make.left.equalTo(@0);
+        make.bottom.equalTo(superView.mas_bottom);
+        make.width.equalTo(@(kFrameWidth));
+        make.height.equalTo(@(49));
+    }];
 }
 
 - (void)updateFooterBarView {
@@ -438,6 +455,7 @@
     [gotoBuyBtn setTitleColor:CustomGreenColor forState:UIControlStateSelected];
     [gotoBuyBtn addTarget:self action:@selector(gotoBuyButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     gotoBuyBtn.layer.borderWidth = 0.5f;
+    [gotoBuyBtn setTag:105];
     gotoBuyBtn.layer.borderColor = CustomGreenColor.CGColor;
     gotoBuyBtn.layer.cornerRadius = 11.5f;
     [_briefHeadView addSubview:gotoBuyBtn];
@@ -461,6 +479,11 @@
     
     UILabel *evaluNumLabel = [_briefHeadView viewWithTag:103];
     [evaluNumLabel setText:[NSString stringWithFormat:@"%ld条评测", (long)_goodsEvaluModel.evaluateNum]];
+    
+    if (_goodsEvaluModel.sellUrl && _goodsEvaluModel.sellUrl.count <= 0) {
+        UIButton *gotoBuyBtn = [_briefHeadView viewWithTag:105];
+        [gotoBuyBtn setHidden:YES];
+    }
 }
 
 - (void)gotoBuyButtonClick:(UIButton *)sender {
@@ -494,56 +517,77 @@
         return tipLabel;
     };
     
-    CGFloat heightGap = 11.0f;
+    CGFloat heightGap = 9.0f;
     _racketParaView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kFrameWidth, 180)];
     [_racketParaView setBackgroundColor:[UIColor whiteColor]];
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 11; i++) {
         CGFloat xPosi = 23;
         if (i % 2 == 1) {
             xPosi = kFrameWidth*8/15;
         }
         UILabel *tipLabel = createTipLabel(100+i, @"", Gray153Color);
-        [tipLabel setFrame:CGRectMake(xPosi, 20 + (20 + heightGap) * (i/2), 35, 20)];
+        [tipLabel setFrame:CGRectMake(xPosi, 13 + (18 + heightGap) * (i/2), 35, 20)];
         [tipLabel sizeToFit];
         [tipLabel setHidden:YES];
         [_racketParaView addSubview:tipLabel];
+        
+        xPosi = CGRectGetMaxX(tipLabel.frame);
+        CGFloat yPosi = CGRectGetMinY(tipLabel.frame);
+        UILabel *valueL = createTipLabel(200+i, @"", Gray102Color);
+        [valueL setFrame:CGRectMake(xPosi, yPosi, 35, 20)];
+        [valueL sizeToFit];
+        [valueL setHidden:YES];
+        [_racketParaView addSubview:valueL];
     }
     
-    for (int i = 0; i < 10; i++) {
-        UILabel *tipL = [_racketParaView viewWithTag:100+i];
-        CGFloat xPosi = CGRectGetMaxX(tipL.frame);
-        CGFloat yPosi = tipL.frame.origin.y;
-        
-        UILabel *tipLabel = createTipLabel(200+i, @"", Gray102Color);
-        [tipLabel setFrame:CGRectMake(xPosi, yPosi, 35, 20)];
-        [tipLabel sizeToFit];
-        [tipLabel setHidden:YES];
-        [_racketParaView addSubview:tipLabel];
-    }
+//    for (int i = 0; i < 10; i++) {
+//        UILabel *tipL = [_racketParaView viewWithTag:100+i];
+//        CGFloat xPosi = CGRectGetMaxX(tipL.frame);
+//        CGFloat yPosi = tipL.frame.origin.y;
+//        
+//        UILabel *tipLabel = createTipLabel(200+i, @"", Gray102Color);
+//        [tipLabel setFrame:CGRectMake(xPosi, yPosi, 35, 20)];
+//        [tipLabel sizeToFit];
+//        [tipLabel setHidden:YES];
+//        [_racketParaView addSubview:tipLabel];
+//    }
 }
 
-- (CGFloat)getRacketParaViewH:(GoodsType)type {
+- (CGFloat)getRacketParaViewHeight {
+    GoodsType type = _goodsEvaluModel.type;
     switch (type) {
         case GoodsType_Racket:
-            return 180.0f;
+        {
+            if (_goodsEvaluModel.isJunior == JuniorRacket_NO) {
+                return 177.0f;
+            } else {
+                return 42.0f;
+            }
+        }
         case GoodsType_RacketLine:
-            return 116.0f;
+            return 96.0f;
         default:
-            return 180.0f;
+            return 177.0f;
     }
 }
 
 - (void)updateRacketParameterView {
     NSArray *tipStrArr = @[@"品牌:", @"参考价:", @"长度:", @"颜色:",
-                           @"硬度:", @"拍面:", @"穿线重量:", @"穿线方式:", @"边框厚度:"];
+                           @"硬度:", @"拍面:", @"穿线重量:", @"穿线方式:",
+                           @"挥重:", @"平衡点:", @"边框厚度:"];
 //    @"市场价:",
     if (_goodsEvaluModel.type == GoodsType_RacketLine) {
         tipStrArr = @[@"生产商:", @"直径:", @"颜色:", @"材料:", @"结构:", @"特性:"];
+    } else {
+        if (_goodsEvaluModel.isJunior == JuniorRacket_YES) {
+            // 儿童拍
+            tipStrArr = @[@"品牌:", @"参考价:"];
+        }
     }
-    [_racketParaView setFrame:CGRectMake(0, 0, kFrameWidth, [self getRacketParaViewH:_goodsEvaluModel.type])];
+    [_racketParaView setFrame:CGRectMake(0, 0, kFrameWidth, [self getRacketParaViewHeight])];
     
     GoodsType goodsType = _goodsEvaluModel.type;
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 11; i++) {
         UILabel *tipL = [_racketParaView viewWithTag:100+i];
         [tipL setText:i < tipStrArr.count?tipStrArr[i]:@""];
         [tipL sizeToFit];
@@ -617,11 +661,17 @@
             }
                 break;
             case 8:
-//                tipStr = [NSString stringWithFormat:@"￥%ld", (long)_goodsEvaluModel.oriPrice];
-//                break;
+            {
+                tipStr = [NSString stringWithFormat:@"%.2f", _goodsEvaluModel.swiWeight];
+            }
+                break;
             case 9:
             {
-                
+                tipStr = [NSString stringWithFormat:@"%@", _goodsEvaluModel.balance];
+            }
+                break;
+            case 10:
+            {
                 if (goodsType == GoodsType_Racket) {
                     tipStr = [NSString stringWithFormat:@"%.1f/%.1f/%.1f mm", _goodsEvaluModel.beamwidthA, _goodsEvaluModel.beamwidthB, _goodsEvaluModel.beamwidthC];
                 } else if (goodsType == GoodsType_RacketLine) {
@@ -747,6 +797,23 @@
     }
 }
 
+#pragma mark - WBApiManagerDelegate
+- (void)wbApiManagerDidRecvMessageResponse:(WBSendMessageToWeiboResponse *)response {
+    if ((NSInteger)response.statusCode == 0) {
+        [self sendUserShare:UserLikeType_Goods itemId:self.goodsId];
+        NSString* accessToken = [response.authResponse accessToken];
+        if (accessToken) {
+            [QiuPaiUserModel getUserInstance].wbtoken = accessToken;
+        }
+        NSString* userID = [response.authResponse userID];
+        if (userID) {
+            [QiuPaiUserModel getUserInstance].wbCurrentUserID = userID;
+        }
+    } else {
+    
+    }
+}
+
 
 #pragma mark - WXApiManagerDelegate
 - (void)managerDidRecvMessageResponse:(SendMessageToWXResp *)response {
@@ -858,10 +925,13 @@
             NSDictionary *dataDic = [dic objectForKey:@"returnData"];
             if ([[dataDic objectForKey:@"hasAllInfo"] integerValue] == 0) {
 
-                DDAlertView *alertView = [[DDAlertView alloc] initWithTitle:@"完善个人资料后查看球拍与你的匹配指数" itemTitles:@[@"立即完善"] itemTags:@[@100]];
+                DDAlertView *alertView = [[DDAlertView alloc] initWithTitle:@"完善个人资料后可更精确的查看球拍与你的匹配指数" itemTitles:@[@"立即完善", @"查看结果"] itemTags:@[@100, @200]];
                 [alertView showWithClickBlock:^(NSInteger btnIndex) {
                     if (btnIndex == 100) {
                         [self performSegueWithIdentifier:IdentifierCompleteInfomation sender:nil];
+                    } else if (btnIndex == 200) {
+                        KnockUpResultModel *tmpModel = [[KnockUpResultModel alloc] initWithAttributes:dataDic];
+                        [self performSegueWithIdentifier:IdentifierKnockUpResult sender:tmpModel];
                     }
                 }];
                 
@@ -930,7 +1000,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section == 0) {
-        return [self getRacketParaViewH:_goodsEvaluModel.type]+5.0f;
+        return [self getRacketParaViewHeight]+5.0f;
     }
     CircleInfoModel *infoModel = [_evaluContDataArr objectAtIndex:indexPath.row];
     return [infoModel getCircleInfoCellHeight:YES isCircleList:YES];

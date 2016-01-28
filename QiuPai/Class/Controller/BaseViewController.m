@@ -133,39 +133,43 @@
 }
 
 - (void)loadingViewShow:(NSString *)tipStr {
-    if (_proHUD ==nil) {
+    if (_proHUD == nil) {
         _proHUD = [[MBProgressHUD alloc] initWithView:self.view];
         [self.navigationController.view addSubview:_proHUD];
-        _proHUD.delegate = self;
-        if (!tipStr) {
-            tipStr = @"网络加载中";
-        }
-        _proHUD.labelText = tipStr;
-        [_proHUD show:YES];
     }
+    _proHUD.delegate = self;
+    if (!tipStr) {
+        tipStr = @"网络加载中";
+    }
+    _proHUD.labelText = tipStr;
+    [_proHUD show:YES];
 }
 
 - (void)loadingTipView:(NSString *)tipStr callBack:(MBLoadingCB)callBack {
-    if (_proHUD ==nil) {
+    if (_proHUD == nil) {
         _proHUD = [[MBProgressHUD alloc] initWithView:self.view];
-        [self.view addSubview:_proHUD];
-        if (!tipStr) {
-            tipStr = @"加载中...";
-        }
-        _proHUD.mode = MBProgressHUDModeText;
-        _proHUD.margin = 10.f;
-//        _proHUD.yOffset = 150.f;
-        _proHUD.labelText = tipStr;
-        [_proHUD showAnimated:YES whileExecutingBlock:^{
-            [self doTask];
-        } completionBlock:^{
-            [_proHUD removeFromSuperview];
-            _proHUD = nil;
-            if (callBack) {
-                callBack();
-            }
-        }];
+        [self.navigationController.view addSubview:_proHUD];
     }
+    _proHUD.opacity = 0.5f;
+    _proHUD.labelFont = [UIFont systemFontOfSize:15.0f];
+    _proHUD.cornerRadius = 5.0f;
+//    [_proHUD show:YES];
+    if (!tipStr) {
+        tipStr = @"加载中...";
+    }
+    _proHUD.mode = MBProgressHUDModeText;
+    _proHUD.margin = 10.f;
+    //        _proHUD.yOffset = 150.f;
+    _proHUD.labelText = tipStr;
+    [_proHUD showAnimated:YES whileExecutingBlock:^{
+        [self doTask];
+    } completionBlock:^{
+        [_proHUD removeFromSuperview];
+        _proHUD = nil;
+        if (callBack) {
+            callBack();
+        }
+    }];
 }
 
 -(void) doTask{

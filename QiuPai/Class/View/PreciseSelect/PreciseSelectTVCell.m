@@ -96,7 +96,7 @@
     [_titleLabel setTextAlignment:NSTextAlignmentLeft];
     [_titleLabel setText:rciModel.title];
     
-    [_specialTopicImageView sd_setImageWithURL:[NSURL URLWithString:rciModel.thumbPicUrl] placeholderImage:[UIImage imageNamed:@"placeholder_theme.jpg"]];
+    [_specialTopicImageView sd_setImageWithURL:[NSURL URLWithString:rciModel.picUrl] placeholderImage:[UIImage imageNamed:@"placeholder_theme.jpg"]];
     
     NSString *likeTip = [NSString stringWithFormat:@"%ld", (long)rciModel.praiseNum];
     [_likeBtn setTitle:likeTip forState:UIControlStateNormal];

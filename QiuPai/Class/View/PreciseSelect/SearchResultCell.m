@@ -83,7 +83,7 @@
     return self;
 }
 
-- (void)bindCellWithDataModel:(RacketSearchModel *) infoModel showBuyBtn:(BOOL)isShow {
+- (void)bindCellWithDataModel:(RacketSearchModel *)infoModel showBuyBtn:(BOOL)isShow {
     _infoModel = infoModel;
     CGFloat cellH = [_infoModel getZanListCellHeight];
     
@@ -98,7 +98,7 @@
     
     if (isShow) {
         if (infoModel.type == GoodsType_Racket || infoModel.type == GoodsType_RacketLine) {
-            [_gotoBuyBtn setHidden:NO];
+            [_gotoBuyBtn setHidden:infoModel.sellUrl.count <= 0 ? YES : NO];
         }
     } else {
         [_gotoBuyBtn setHidden:YES];

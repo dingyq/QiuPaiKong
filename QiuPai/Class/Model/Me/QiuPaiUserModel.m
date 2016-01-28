@@ -197,8 +197,11 @@ static NSString *tableName = @"QiuPaiUser";
 
 - (void)userLogout {
     self.isTimeOut = YES;
+}
+
+- (void)clearAllUserData {
     NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
-//    [ud setObject:@"" forKey:@"userId"];
+    //    [ud setObject:@"" forKey:@"userId"];
     [ud removeObjectForKey:@"userId"];
     [ud synchronize];
     self.userId = @"";
@@ -328,6 +331,18 @@ static NSString *tableName = @"QiuPaiUser";
 
 - (NSNumber *)style {
     return _style?_style:@1;
+}
+
+- (NSString *)wbRefreshToken {
+    return _wbRefreshToken ? _wbRefreshToken:@"";
+}
+
+- (void)setIsTimeOut:(BOOL)isTimeOut {
+    _isTimeOut = isTimeOut;
+    if (_isTimeOut) {
+        // 登录态失效
+        [self clearAllUserData];
+    }
 }
 
 @end
