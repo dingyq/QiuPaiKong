@@ -51,4 +51,9 @@
     
 }
 
+
+- (NSString *)title {
+    return _title ? _title : @"球拍控";
+}
+
 @end

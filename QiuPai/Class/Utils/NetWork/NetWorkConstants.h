@@ -9,11 +9,21 @@
 #ifndef NetWorkConstants_h
 #define NetWorkConstants_h
 
-#define Request_Base_Url @"http://qiupai.co/qpkServer/cgi/user_svc.php"
-#define Request_UploadImage_Url @"http://qiupai.co/qpkServer/picCgi/evapic_upload.php"
+//状态：0正常登录1微信token超时2本地authkey需要刷新3用户不存在(使用authkey校验时)4用户不存在(验证码登录的方式) 5验证码错误
+typedef NS_ENUM(NSInteger, LoginFlag) {
+    LoginFlag_Success = 0,
+    LoginFlag_TimeOut_WxToken = 1,
+    LoginFlag_TimeOut_AuthKey = 2,
+    LoginFlag_NoUser_AuthKey = 3,
+    LoginFlag_NoUser_AuthCode = 4,
+    LoginFlag_Error_AuthCode = 5,
+    LoginFlag_Error_PhoneNum = 6,
+};
 
-//#define Request_Base_Url @"http://biubiu.co/qpkServer/cgi/user_svc.php"
-//#define Request_UploadImage_Url @"http://biubiu.co/qpkServer/picCgi/evapic_upload.php"
+typedef NS_ENUM(NSInteger, JuniorRacket) {
+    JuniorRacket_NO = 0,
+    JuniorRacket_YES = 1,
+};
 
 // 信息类型
 typedef NS_ENUM(NSInteger, InfoType) {
@@ -46,6 +56,7 @@ typedef NS_ENUM(NSInteger, ShareScene) {
     ShareScene_WxPyq = 1,
     ShareScene_QQSession = 2,
     ShareScene_QZone = 3,
+    ShareScene_Weibo = 4,
 };
 
 // 消息状态：评测、留言、评论
@@ -114,12 +125,14 @@ typedef NS_ENUM(NSInteger, UserType){
     UserTypeWeiXin = 1,
     UserTypeLocalUser = 2,
     UserTypeQQ = 3,
+    UserTypeWeibo = 4,
 };
 
 // 用户登录方式
 typedef NS_ENUM(NSInteger, LoginMode){
     LoginModeAuthKey = 1,
     LoginModePwd = 2,
+    LoginModeCode = 3,
 };
 
 // 消息类型
@@ -156,6 +169,10 @@ typedef NS_ENUM(NSInteger, NetWorkRequestID){
     RequestID_ModifyPersonalInfo,
     RequestID_GetAllMessageInfo,
     RequestID_SendUserLoginRequest,
+    RequestID_SendUserRegisterRequest,
+    RequestID_GetMobileAuthCode,
+    RequestID_FindPwdBack,
+    RequestID_ModifyPwd,
 };
 
 typedef enum HttpRequestMethod {
@@ -177,7 +194,18 @@ typedef NS_ENUM(NSInteger, NetWorkStatusCode){
     NetWorkLikeDuplicate = 7,
     NetWorkLikeIdPartErr = 8,
     NetWorkAuthKeyExpr = 10,
-    
+    NetWorkPraiseDuplicate = 11,
+    NetWorkPraiseIdPartError = 12,
+    NetWorkEvaNotUser = 13,
+    NetWorkCommentNotUser = 14,
+    NetWorkEvaNotExist = 15,
+    NetWorkCommentNotExist = 16,
+    NetWorkPhoneIllegal = 17,
+    NetWorkGetVKeyTooOfTen = 18,
+    NetWorkPasswdWrong = 19,
+    NetWorkErrorMobileCode = 20,
+    NetWorkUserExist = 21,
+    NetWorkNickEmpty = 22
 };
 
 

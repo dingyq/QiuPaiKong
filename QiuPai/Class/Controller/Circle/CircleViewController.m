@@ -571,9 +571,7 @@ typedef NS_ENUM(NSInteger, CircleInfoType) {
         if ([[dic objectForKey:@"statusCode"] integerValue] == NetWorkJsonResOK) {
             NSDictionary *dataDic = [dic objectForKey:@"returnData"];
             NSArray *opArr = _recentInfoArrayList;
-            if (_segmentIndex == CircleInfoTypeRecent) {
-                opArr = _recentInfoArrayList;
-            } else {
+            if (_segmentIndex == CircleInfoTypeAttention) {
                 opArr = _attentionInfoArrayList;
             }
             for (int i = 0; i < [opArr count]; i ++) {
@@ -592,9 +590,7 @@ typedef NS_ENUM(NSInteger, CircleInfoType) {
         if ([[dic objectForKey:@"statusCode"] integerValue] == NetWorkJsonResOK) {
             NSDictionary *dataDic = [dic objectForKey:@"returnData"];
             NSArray *opArr = _recentInfoArrayList;
-            if (_segmentIndex == CircleInfoTypeRecent) {
-                opArr = _recentInfoArrayList;
-            } else {
+            if (_segmentIndex == CircleInfoTypeAttention) {
                 opArr = _attentionInfoArrayList;
             }
             for (int i = 0; i < [opArr count]; i ++) {
@@ -676,10 +672,7 @@ typedef NS_ENUM(NSInteger, CircleInfoType) {
                 });
             });
         }
-    } else if (RequestID_GetGoodsDetailAndEvaluation == requestID) {
-        
     }
-    
 }
 
 - (void)netWorkFailedCallback:(NSError *)err withRequestID:(NetWorkRequestID)requestID {

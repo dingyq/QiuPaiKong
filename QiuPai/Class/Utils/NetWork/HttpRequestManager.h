@@ -38,10 +38,14 @@
 + (RequestInfo *)knockUpDirectly:(NSDictionary *)requestInfo; // 直接虚拟试打
 + (RequestInfo *)completeInfomationAndKnockUp:(NSDictionary *)requestInfo; // 完善资料后虚拟试打
 
++ (RequestInfo *)findPwdBack:(NSDictionary *)requestInfo; // 找回密码
++ (RequestInfo *)modifyPwd:(NSDictionary *)requestInfo; // 修改密码
++ (RequestInfo *)getMobileAuthCode:(NSDictionary *)requestInfo; // 获取手机短信验证码
 + (RequestInfo *)getAllNewMessageTip:(NSDictionary *)requestInfo; // 拉取自己新消息数量
 + (RequestInfo *)getUserInfo:(NSDictionary *)requestInfo; // 拉取自己个人信息完整
 + (RequestInfo *)modifyPersonalInfo:(NSDictionary *)requestInfo; // 修改自己个人信息完整
 + (RequestInfo *)sendUserLoginRequest:(NSDictionary *)requestInfo; // 发送用户登录请求
++ (RequestInfo *)sendUserRegisterRequest:(NSDictionary *)requestInfo; // 发送用户注册请求
 
 + (RequestInfo *)sendUserZanRequest:(NSDictionary *)requestInfo; //赞
 

@@ -10,6 +10,7 @@
 
 @interface FMDBRoot() {
     FMDatabase *fmdb;
+    NSInteger _openRC;
     NSString *dbPath;
 }
 
@@ -32,6 +33,7 @@
 - (instancetype)init {
     self = [super init];
     dbPath = [PATH_OF_DOCUMENT stringByAppendingPathComponent:@"QiuPaiInfo.sqlite"];
+    _openRC = 0;
     return self;
 }
 
@@ -61,12 +63,15 @@
     return sql;
 }
 
-
-
-
+- (void)closeDatabase {
+    _openRC -- ;
+    if (_openRC <= 0) {
+        [fmdb close];
+    }
+}
 
 // 打开数据库
-- (void)readyDatabse {
+- (void)readyDatabase {
 //    BOOL success;
     //NSError *error;
     
@@ -74,14 +79,14 @@
 //    success = [fileManager fileExistsAtPath:dbPath];
 //    if (!success)
 //        return;
-    
-    
     fmdb = [FMDatabase databaseWithPath:dbPath];
 //    fmdb = [[FMDatabase alloc] initWithPath:dbPath];
 
     if (![fmdb open]) {
         [fmdb close];
         NSAssert1(0, @"Failed to open database file with message '%@'.", [fmdb lastErrorMessage]);
+    } else {
+        _openRC++;
     }
     // kind of experimentalish.
     [fmdb setShouldCacheStatements:YES];
@@ -95,7 +100,7 @@
     NSFileManager *fileManager = [NSFileManager defaultManager];
     // delete the old db.
     if ([fileManager fileExistsAtPath:dbPath]) {
-        [fmdb close];
+        [self closeDatabase];
         success = [fileManager removeItemAtPath:dbPath error:&error];
         if (!success) {
             NSAssert1(0, @"Failed to delete old database file with message '%@'.", [error localizedDescription]);
@@ -105,78 +110,78 @@
 
 // 判断是否存在表
 - (BOOL) isTableExist:(NSString *)tableName {
-    [self readyDatabse];
+    [self readyDatabase];
     FMResultSet *rs = [fmdb executeQuery:@"SELECT count(*) as 'count' FROM sqlite_master WHERE type ='table' and name = ?", tableName];
     while ([rs next]) {
         // just print out what we've got in a number of formats.
         NSInteger count = [rs intForColumn:@"count"];
         NSLog(@"isTableOK %ld", (long)count);
         
-        [fmdb close];
+        [self closeDatabase];
         if (0 == count) {
             return NO;
         } else {
             return YES;
         }
     }
-    [fmdb close];
+    [self closeDatabase];
     return NO;
 }
 
 // 创建表
 - (BOOL)createTable:(NSString *)tableName withTableColumnDic:(NSDictionary *)tableColumn {
     NSString *arguments = [self getCreateTableSqlArguments:tableColumn];
-    [self readyDatabse];
+    [self readyDatabase];
     NSString *sqlstr = [NSString stringWithFormat:@"CREATE TABLE %@ (%@)", tableName, arguments];
     if (![fmdb executeUpdate:sqlstr]) {
         //if ([fmdb executeUpdate:@"create table user (name text, pass text)"] == nil)
         NSLog(@"Create fmdb error!");
         return NO;
     }
-    [fmdb close];
+    [self closeDatabase];
     return YES;
 }
 
 // 创建表
 - (BOOL)createTable:(NSString *)tableName withArguments:(NSString *)arguments {
-    [self readyDatabse];
+    [self readyDatabase];
     NSString *sqlstr = [NSString stringWithFormat:@"CREATE TABLE %@ (%@)", tableName, arguments];
     if (![fmdb executeUpdate:sqlstr]) {
         //if ([fmdb executeUpdate:@"create table user (name text, pass text)"] == nil)
         NSLog(@"Create fmdb error!");
         return NO;
     }
-    [fmdb close];
+    [self closeDatabase];
     return YES;
 }
 
 // 删除表
 - (BOOL)deleteTable:(NSString *)tableName {
-    [self readyDatabse];
+    [self readyDatabase];
     NSString *sqlstr = [NSString stringWithFormat:@"DROP TABLE %@", tableName];
     if (![fmdb executeUpdate:sqlstr]) {
         NSLog(@"Delete table error!");
         return NO;
     }
-    [fmdb close];
+    [self closeDatabase];
     return YES;
 }
 
 // 清除表
 - (BOOL)eraseTable:(NSString *)tableName {
-    [self readyDatabse];
+    [self readyDatabase];
     NSString *sqlstr = [NSString stringWithFormat:@"DELETE FROM %@", tableName];
     if (![fmdb executeUpdate:sqlstr]) {
         NSLog(@"Erase table error!");
         return NO;
     }
-    [fmdb close];
+    [self closeDatabase];
     return YES;
 }
 
 // 获得表的数据条数
 - (BOOL)getTableItemCount:(NSString *)tableName {
-    [self readyDatabse];
+    [self readyDatabase];
     NSString *sqlstr = [NSString stringWithFormat:@"SELECT count(*) as 'count' FROM %@", tableName];
     FMResultSet *rs = [fmdb executeQuery:sqlstr];
     while ([rs next]) {
@@ -185,12 +190,14 @@
         NSLog(@"TableItemCount %ld", (long)count);
         return count;
     }
-    [fmdb close];
+    [self closeDatabase];
     return 0;
 }
 
+
+
 - (NSMutableArray *)queryTable:(NSString *)tableName withDic:(NSDictionary *)dic {
-    [self readyDatabse];
+    [self readyDatabase];
     NSMutableArray *tmpArr = [[NSMutableArray alloc] init];
     NSArray *keys = [dic allKeys];
     NSString *keyStr = [keys objectAtIndex:0];
@@ -201,13 +208,13 @@
     while ([rs next]) {
         [tmpArr addObject:[rs resultDictionary]];
     }
-    [fmdb close];
+    [self closeDatabase];
     
     return tmpArr;
 }
 
 - (NSMutableArray *)queryTableWithSelfDefineSql:(NSString *)sql {
-    [self readyDatabse];
+    [self readyDatabase];
     NSMutableArray *tmpArr = [[NSMutableArray alloc] init];
     
     FMResultSet *rs = 0x00;
@@ -216,7 +223,7 @@
     while ([rs next]) {
         [tmpArr addObject:[rs resultDictionary]];
     }
-    [fmdb close];
+    [self closeDatabase];
     
     // 输出查询结果
     for (NSDictionary *dic in tmpArr) {
@@ -237,7 +244,7 @@
 
 // 查询数据
 - (NSMutableArray *)queryTable:(NSString *)tableName {
-    [self readyDatabse];
+    [self readyDatabase];
     NSMutableArray *tmpArr = [[NSMutableArray alloc] init];
     
     FMResultSet *rs = 0x00;
@@ -246,7 +253,7 @@
     while ([rs next]) {
         [tmpArr addObject:[rs resultDictionary]];
     }
-    [fmdb close];
+    [self closeDatabase];
     
     // 输出查询结果
     for (NSDictionary *dic in tmpArr) {
@@ -271,6 +278,7 @@
     if (![self isTableExist:tableName]) {
         [self createTable:tableName withTableColumnDic:tableColumnDic];
     }
+    [self readyDatabase];
     
     NSString * sql = [self getInsertDataSql:tableName tableColumnDic:tableColumnDic];
     
@@ -294,29 +302,28 @@
         [argsArr addObject:tmpObj];
     }
     
-    [self readyDatabse];
     BOOL result = [fmdb executeUpdate:sql withArgumentsInArray:argsArr];
-    [fmdb close];
+    [self closeDatabase];
     return result;
 }
 
 - (BOOL)insertTable:(NSString*)sql withDic:(NSDictionary *)argsDic {
-    [self readyDatabse];
+    [self readyDatabase];
     BOOL result = [fmdb executeUpdate:sql withParameterDictionary:argsDic];
-    [fmdb close];
+    [self closeDatabase];
     return result;
 }
 
 - (BOOL)insertTable:(NSString*)sql withArr:(NSMutableArray *)argsArr {
-    [self readyDatabse];
+    [self readyDatabase];
     BOOL result = [fmdb executeUpdate:sql withArgumentsInArray:argsArr];
-    [fmdb close];
+    [self closeDatabase];
     return result;
 }
 
 // 修改数据
 //- (BOOL)updateTable:(NSString*)sql, ... {
-//    [self readyDatabse];
+//    [self readyDatabase];
 //    NSMutableArray *tmpArr = [[NSMutableArray alloc] init];
 //    va_list arguments;
 //    va_start(arguments, sql);
@@ -325,7 +332,7 @@
 //        [tmpArr addObject:eachObj];
 //    }
 //    BOOL result = [fmdb executeUpdate:sql withArgumentsInArray:tmpArr];
-//    [fmdb close];
+//    [self closeDatabase];
 //    va_end(arguments);
 //    return result;
 //}
@@ -341,26 +348,26 @@
     [sqlStr deleteCharactersInRange:NSMakeRange(sqlStr.length - 2, 2)];
     [sqlStr appendString:[NSString stringWithFormat:@" WHERE %@ = '%@'", majorKey, [valueArgsDic objectForKey:majorKey]]];
 
-    [self readyDatabse];
+    [self readyDatabase];
     if (![fmdb executeUpdate:sqlStr]) {
         NSLog(@"update data error!");
-        [fmdb close];
+        [self closeDatabase];
         return NO;
     }
-    [fmdb close];
+    [self closeDatabase];
     return YES;
 }
 
 // 删除数据
 - (BOOL)deleteRecordOfTable:(NSString *)tableName key:(NSString *)key value:(NSInteger)value {
     NSString *sql = [NSString stringWithFormat:@"DELETE FROM %@ WHERE %@ = '%ld'", tableName, key, (long)value];
-    [self readyDatabse];
+    [self readyDatabase];
     if (![fmdb executeUpdate:sql]) {
         NSLog(@"delete data error!");
-        [fmdb close];
+        [self closeDatabase];
         return NO;
     }
-    [fmdb close];
+    [self closeDatabase];
     return YES;
 }
 
@@ -405,14 +412,14 @@
 
 // 整型
 - (NSInteger)getDb_Integerdata:(NSString *)tableName withFieldName:(NSString *)fieldName {
-    [self readyDatabse];
+    [self readyDatabase];
     NSInteger result = NO;
     NSString *sql = [NSString stringWithFormat:@"SELECT %@ FROM %@", fieldName, tableName];
     FMResultSet *rs = [fmdb executeQuery:sql];
     if ([rs next])
         result = [rs intForColumnIndex:0];
     [rs close];
-    [fmdb close];
+    [self closeDatabase];
     return result;
 }
 
@@ -425,27 +432,27 @@
 
 // 字符串型
 - (NSString *)getDb_Stringdata:(NSString *)tableName withFieldName:(NSString *)fieldName {
-    [self readyDatabse];
+    [self readyDatabase];
     NSString *result = @"";
     NSString *sql = [NSString stringWithFormat:@"SELECT %@ FROM %@", fieldName, tableName];
     FMResultSet *rs = [fmdb executeQuery:sql];
     if ([rs next])
         result = [rs stringForColumnIndex:0];
     [rs close];
-    [fmdb close];
+    [self closeDatabase];
     return result;
 }
 
 // 二进制数据型
 - (NSData *)getDb_Bolbdata:(NSString *)tableName withFieldName:(NSString *)fieldName {
-    [self readyDatabse];
+    [self readyDatabase];
     NSData *result = nil;
     NSString *sql = [NSString stringWithFormat:@"SELECT %@ FROM %@", fieldName, tableName];
     FMResultSet *rs = [fmdb executeQuery:sql];
     if ([rs next])
         result = [rs dataForColumnIndex:0];
     [rs close];
-    [fmdb close];
+    [self closeDatabase];
     return result;
 }
 

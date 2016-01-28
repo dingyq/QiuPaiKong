@@ -60,20 +60,20 @@ static NSString *kImage = @"image";
     [self updateValueArr];
     [_detailTV reloadData];
     
-    BOOL hasValue = NO;
-    if ([_valueArr count]>0) {
-        for (NSString *tmpStr in _valueArr) {
-            if (![tmpStr isEqualToString:@""]) {
-                hasValue = YES;
-                return;
-            }
-        }
-    }
-    
-    if (!hasValue) {
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"完善个人资料后才可查看试打报告" message:@"" delegate:self cancelButtonTitle:@"立即完善" otherButtonTitles:@"取消", nil];
-        [alertView show];
-    }
+//    BOOL hasValue = NO;
+//    if ([_valueArr count]>0) {
+//        for (NSString *tmpStr in _valueArr) {
+//            if (![tmpStr isEqualToString:@""]) {
+//                hasValue = YES;
+//                return;
+//            }
+//        }
+//    }
+//    
+//    if (!hasValue) {
+//        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"完善个人资料后才可查看试打报告" message:@"" delegate:self cancelButtonTitle:@"立即完善" otherButtonTitles:@"取消", nil];
+//        [alertView show];
+//    }
 }
 
 - (void)viewDidAppear:(BOOL)animated {

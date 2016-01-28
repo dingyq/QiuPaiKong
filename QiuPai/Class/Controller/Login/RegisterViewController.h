@@ -10,4 +10,7 @@
 
 @interface RegisterViewController : BaseViewController
 
+@property (nonatomic, copy) NSString *telePhoneNum;
+@property (nonatomic, copy) NSString *mobileCode;
+
 @end

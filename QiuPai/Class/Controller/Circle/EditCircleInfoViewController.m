@@ -516,7 +516,7 @@ static NSInteger ContentWordsMaxNum = 1000;
         cell.selectionStyle = UITableViewCellSelectionStyleDefault;
         return cell;
     } else {
-        identifier = @"EditCircleCell";
+//        identifier = @"EditCircleCell";
         if (row == 0) {
             PlaceHolderTextView *titleInput;
             identifier = @"EditCircleCell1";
@@ -591,7 +591,7 @@ static NSInteger ContentWordsMaxNum = 1000;
                 [syncMsgView addSubview:shareBtn];
                 [cell.contentView addSubview:syncMsgView];
             }
-            syncMsgView = [cell.contentView viewWithTag:104];
+//            syncMsgView = [cell.contentView viewWithTag:104];
             cell.accessoryType = UITableViewCellAccessoryNone;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             [cell setBackgroundColor:[UIColor clearColor]];

@@ -40,12 +40,14 @@
     self.isLike = [[attributes objectForKey:@"isLike"] integerValue];
     self.shareNum = [[attributes objectForKey:@"shareNum"] integerValue];
     self.evaluateNum = [[attributes objectForKey:@"evaluateNum"] integerValue];
+    self.swiWeight = [[attributes objectForKey:@"swiWeight"] floatValue];
     
     self.dia = [[attributes objectForKey:@"dia"] floatValue];
     self.material = [attributes objectForKey:@"material"];
     self.structure = [attributes objectForKey:@"structure"];
     self.character = [attributes objectForKey:@"character"];
     
+    self.isJunior = [[attributes objectForKey:@"isJunior"] integerValue];
     return self;
 }
 
@@ -73,7 +75,8 @@
     if ([_sellUrl count] > 0) {
         return _sellUrl;
     } else {
-        return @[Goods_Default_Url];
+//        return @[Goods_Default_Url];
+        return @[];
     }
 }
 

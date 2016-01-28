@@ -70,7 +70,7 @@
         case EQQAPIMESSAGECONTENTNULL:
         case EQQAPIMESSAGETYPEINVALID:
         {
-            UIAlertView *msgbox = [[UIAlertView alloc] initWithTitle:@"Error" message:@"发送参数错误" delegate:nil cancelButtonTitle:@"取消" otherButtonTitles:nil];
+            UIAlertView *msgbox = [[UIAlertView alloc] initWithTitle:@"" message:@"请等待加载完毕后再尝试分享" delegate:nil cancelButtonTitle:@"取消" otherButtonTitles:nil];
             [msgbox show];
             break;
         }

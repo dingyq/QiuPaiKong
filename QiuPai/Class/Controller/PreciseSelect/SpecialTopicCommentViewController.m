@@ -73,7 +73,6 @@
         if (_placeHodlerStr && ![_placeHodlerStr isEqualToString:@""]) {
             _textBoxView.textView.placeholder = _placeHodlerStr;
         }
-        _textBoxView.isReply = YES;
     }
 }
 
@@ -94,9 +93,14 @@
     _commentsListTV = [[UITableView alloc] initWithFrame:CGRectMake(0, 64, kFrameWidth, kFrameHeight - 64 - TEXT_BOX_FIELD_HEIGHT) style:UITableViewStylePlain];
     [_commentsListTV setDelegate:self];
     [_commentsListTV setDataSource:self];
-    [self.view addSubview:_commentsListTV];
-    
     _commentsListTV.separatorStyle = UITableViewCellSeparatorStyleNone;
+    [self.view addSubview:_commentsListTV];
+    [_commentsListTV mas_makeConstraints:^(MASConstraintMaker *make){
+        make.left.equalTo(@0);
+        make.top.equalTo(@64);
+        make.width.equalTo(@(kFrameWidth));
+        make.height.equalTo(@(kFrameHeight - 64 - TEXT_BOX_FIELD_HEIGHT));
+    }];
     
     UIView *footerView = [[UIView alloc] init];
     _commentsListTV.tableFooterView = footerView;
@@ -107,17 +111,11 @@
     _textBoxView = [[DDTextBoxView alloc] initWithFrame:CGRectMake(0, kFrameHeight - TEXT_BOX_FIELD_HEIGHT, kFrameWidth, TEXT_BOX_FIELD_HEIGHT)];
     _textBoxView.myDelegate = self;
     _textBoxView.isSelfEvalu = NO;
-    _textBoxView.isUserLike = self.isLike;
-    _textBoxView.isShowLike = NO;
-    
-    
-    [_textBoxView setBackgroundColor:[UIColor whiteColor]];
     [self.view addSubview:_textBoxView];
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
     [super touchesBegan:touches withEvent:event];
-    
     [_textBoxView hideKeyBoard];
 }
 
@@ -340,7 +338,6 @@
         NSString *nickName = [commentModel commentName];
         [_textBoxView displayKeyBoard];
         _textBoxView.textView.placeholder = [NSString stringWithFormat:@"回复 %@:", nickName];
-        _textBoxView.isReply = YES;
     }
 }
 

@@ -15,7 +15,7 @@
 #import "STDetailModel.h"
 #import "STCommentModel.h"
 
-@interface SpecialTopicViewController () <UIWebViewDelegate, NetWorkDelegate, WXApiManagerDelegate> {
+@interface SpecialTopicViewController () <UIWebViewDelegate, NetWorkDelegate, WXApiManagerDelegate, WBApiManagerDelegate> {
     UIWebView *_productWebView;
     UIView *_footerToolBar;
     
@@ -34,6 +34,7 @@
     _stCommentsArr = [[NSMutableArray alloc] init];
 
     [WXApiManager sharedManager].delegate = self;
+    [WBApiManager sharedManager].delegate = self;
     [self showMoreOperationBtn];
     [self initProductWebView];
     [self initFooterToolBarView];
@@ -54,6 +55,7 @@
 
 - (void)dealloc {
     [WXApiManager sharedManager].delegate = nil;
+    [WBApiManager sharedManager].delegate = nil;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -128,23 +130,37 @@
     switch (btnIndex) {
         case 0:
         {
-            UIImageView *tmpImageView = [[UIImageView alloc] init];
-            [tmpImageView sd_setImageWithURL:[NSURL URLWithString:_stDetailModel.thumbPic] placeholderImage:[UIImage imageNamed:@"placeholder_theme.jpg"]];
-            [WXApiRequestHandler sendLinkURL:_pageHtmlUrl TagName:kLinkTagName Title:_stDetailModel.title Description:_stDetailModel.content ThumbImage:tmpImageView.image InScene:WXSceneSession];
+            UIImageView *tmpImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 300, 300)];
+            [tmpImageView setHidden:YES];
+            [self.view addSubview:tmpImageView];
+            [tmpImageView sd_setImageWithURL:[NSURL URLWithString:_stDetailModel.thumbPic] placeholderImage:[UIImage imageNamed:@"placeholder_theme.jpg"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+
+                UIImage *tmpImage = [Helper imageCompressForWidth:image targetWidth:300];
+                [WXApiRequestHandler sendLinkURL:_pageHtmlUrl
+                                         TagName:kLinkTagName
+                                           Title:_stDetailModel.title
+                                     Description:_stDetailModel.content
+                                      ThumbImage:tmpImage
+                                         InScene:WXSceneSession];
+            }];
         }
             break;
         case 1:
         {
-            UIImageView *tmpImageView = [[UIImageView alloc] init];
-            [tmpImageView sd_setImageWithURL:[NSURL URLWithString:_stDetailModel.thumbPic] placeholderImage:[UIImage imageNamed:@"placeholder_theme.jpg"]];
-            [WXApiRequestHandler sendLinkURL:_pageHtmlUrl
-                                     TagName:kLinkTagName
-                                       Title:_stDetailModel.title
-                                 Description:_stDetailModel.content
-                                  ThumbImage:tmpImageView.image
-                                     InScene:WXSceneTimeline];
+            UIImageView *tmpImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 300, 300)];
+            [tmpImageView setHidden:YES];
+            [self.view addSubview:tmpImageView];
+            [tmpImageView sd_setImageWithURL:[NSURL URLWithString:_stDetailModel.thumbPic] placeholderImage:[UIImage imageNamed:@"placeholder_theme.jpg"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+                
+                UIImage *tmpImage = [Helper imageCompressForWidth:tmpImageView.image targetWidth:300];
+                [WXApiRequestHandler sendLinkURL:_pageHtmlUrl
+                                         TagName:kLinkTagName
+                                           Title:_stDetailModel.title
+                                     Description:_stDetailModel.content
+                                      ThumbImage:tmpImage
+                                         InScene:WXSceneTimeline];
+            }];
         }
-            
             break;
         case 2:
         {
@@ -161,6 +177,18 @@
                 [_weakSelf sendUserShare:UserLikeType_SpecialTopic itemId:_topicId];
             }];
             
+        }
+            break;
+        case 4:
+        {
+            NSLog(@"微博分享");
+            UIImageView *tmpImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 200, 200)];
+            [tmpImageView setHidden:YES];
+            [self.view addSubview:tmpImageView];
+            [tmpImageView sd_setImageWithURL:[NSURL URLWithString:_stDetailModel.thumbPic] placeholderImage:[UIImage imageNamed:@"placeholder_theme.jpg"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+                UIImage *tmpImage = [Helper imageCompressForWidth:tmpImageView.image targetWidth:200];
+                [WBApiRequestHandler sendWeiboLinkURL:_pageHtmlUrl Title:_stDetailModel.title Description:_stDetailModel.content ThumbImage:tmpImage];
+            }];
         }
             break;
         default:
@@ -184,6 +212,15 @@
     _productWebView.delegate = self;
     [self.view addSubview:_productWebView];
     [_productWebView loadRequest:request];
+    
+    UIView *superView = self.view;
+    [_productWebView mas_makeConstraints:^(MASConstraintMaker *make){
+        make.left.equalTo(@0);
+        make.top.equalTo(superView.mas_top).with.offset(0);
+        make.width.equalTo(@(kFrameWidth));
+        make.height.equalTo(@(kFrameHeight - 49));
+    }];
+    _productWebView.scrollView.bounces = NO;
 }
 
 - (void)initFooterToolBarView {
@@ -200,6 +237,7 @@
         return tmpButton;
     };
     _footerToolBar = [[UIView alloc] initWithFrame:CGRectMake(0, kFrameHeight - 49, kFrameWidth, 49)];
+    [_footerToolBar setBackgroundColor:[UIColor whiteColor]];
     CustomImageButton *commentBtn = createButton(@"comment_btn.png", @"comment_btn.png", 101, @"", Gray153Color, @"评论");
     [commentBtn setFrame:CGRectMake(0, 0, btnW, btnH)];
     [commentBtn addTarget:self action:@selector(commentButtonClick:) forControlEvents:UIControlEventTouchUpInside];
@@ -226,6 +264,14 @@
     }
     
     [self.view addSubview:_footerToolBar];
+    
+    UIView *superView = self.view;
+    [_footerToolBar mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.height.equalTo(@49);
+        make.width.equalTo(@(kFrameWidth));
+        make.left.equalTo(@0);
+        make.bottom.equalTo(superView.mas_bottom);
+    }];
 }
 
 - (void)updateFooterToolBar {
@@ -290,6 +336,23 @@
     [paramDic setObject:@0 forKey:@"sceneId"];
     RequestInfo *info = [HttpRequestManager reportUGCContent:paramDic];
     info.delegate = self;
+}
+
+#pragma mark - WBApiManagerDelegate
+- (void)wbApiManagerDidRecvMessageResponse:(WBSendMessageToWeiboResponse *)response {
+    if ((NSInteger)response.statusCode == 0) {
+        [self sendUserShare:UserLikeType_SpecialTopic itemId:_topicId];
+        NSString* accessToken = [response.authResponse accessToken];
+        if (accessToken) {
+            [QiuPaiUserModel getUserInstance].wbtoken = accessToken;
+        }
+        NSString* userID = [response.authResponse userID];
+        if (userID) {
+            [QiuPaiUserModel getUserInstance].wbCurrentUserID = userID;
+        }
+    } else {
+        
+    }
 }
 
 #pragma mark - WXApiManagerDelegate

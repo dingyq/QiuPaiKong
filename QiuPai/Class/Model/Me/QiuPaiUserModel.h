@@ -84,6 +84,12 @@
 
 @property (nonatomic, strong) id report;
 
+
+@property (copy, nonatomic) NSString *wbtoken;
+@property (copy, nonatomic) NSString *wbRefreshToken;
+@property (copy, nonatomic) NSString *wbCurrentUserID;
+
+
 + (QiuPaiUserModel *)getUserInstance;
 
 - (void)updateWithDic:(NSDictionary *)dic;

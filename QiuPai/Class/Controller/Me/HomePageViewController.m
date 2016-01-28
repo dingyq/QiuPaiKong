@@ -85,13 +85,14 @@ static const CGFloat DetailViewH = 97.0f;
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    if (_isMyHomePage) {
-        _tvOrignY = 64;
-    } else {
+    if (!_isMyHomePage) {
         self.title = @"";
-        _tvOrignY = 0;
     }
-    [_detailTableView setFrame:CGRectMake(0, _tvOrignY, kFrameWidth, kFrameHeight - 49 - _tvOrignY)];
+    _tvOrignY = _isMyHomePage ? 64 : 0;
+    [_detailTableView mas_updateConstraints:^(MASConstraintMaker *make){
+        make.top.equalTo(@(_tvOrignY));
+        make.height.equalTo(@(kFrameHeight - 49 - _tvOrignY));
+    }];
     if (!_isMyHomePage) {
         [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];
         [self.navigationController.navigationBar setBackgroundImage:[Helper imageWithColor:[CustomGreenColor colorWithAlphaComponent:0]] forBarMetrics:UIBarMetricsDefault];
@@ -104,7 +105,6 @@ static const CGFloat DetailViewH = 97.0f;
         self.navigationController.navigationBar.layer.contents = (id)[Helper imageWithColor:CustomGreenColor].CGImage;
         [self.navigationController.navigationBar lt_setBackgroundColor:CustomGreenColor];
     }
-    [self addRefreshView:_detailTableView];
     [self getHomePageInfoList:GetInfoTypeRefresh sortId:0];
 }
 
@@ -203,12 +203,20 @@ static const CGFloat DetailViewH = 97.0f;
     [_detailTableView setDelegate:self];
     [_detailTableView setDataSource:self];
     _detailTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    [self.view addSubview:_detailTableView];
     [_detailTableView setBackgroundColor:VCViewBGColor];
+    [self.view addSubview:_detailTableView];
+    [_detailTableView mas_makeConstraints:^(MASConstraintMaker *make){
+        make.left.equalTo(@0);
+        make.top.equalTo(@(_tvOrignY));
+        make.width.equalTo(@(kFrameWidth));
+        make.height.equalTo(@(kFrameHeight - 49 - _tvOrignY));
+    }];
     
     UIView *tmpView = [[UIView alloc] init];
     [tmpView setBackgroundColor:[UIColor clearColor]];
     _detailTableView.tableFooterView = tmpView;
+    
+    [self addRefreshView:_detailTableView];
 }
 
 - (void)addRefreshView:(UITableView *)tableView {
@@ -247,6 +255,14 @@ static const CGFloat DetailViewH = 97.0f;
     [_footerToolBar addSubview:linView];
     
     [self.view addSubview:_footerToolBar];
+    
+    UIView *superView = self.view;
+    [_footerToolBar mas_makeConstraints:^(MASConstraintMaker *make){
+        make.left.equalTo(@0);
+        make.bottom.equalTo(superView.mas_bottom);
+        make.width.equalTo(@(kFrameWidth));
+        make.height.equalTo(@49);
+    }];
 }
 
 - (void)liveMessageBtnClick:(UIButton *)sender {

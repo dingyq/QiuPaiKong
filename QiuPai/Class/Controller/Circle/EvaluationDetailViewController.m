@@ -22,7 +22,7 @@ typedef NS_ENUM(NSInteger, IdPartType){
     IdPartType_Comment = 2,
 };
 
-@interface EvaluationDetailViewController()<DDTextBoxViewDelegate, TableViewCellInteractionDelegate, WXApiManagerDelegate, UIAlertViewDelegate>{
+@interface EvaluationDetailViewController()<DDTextBoxViewDelegate, TableViewCellInteractionDelegate, WXApiManagerDelegate, WBApiManagerDelegate, UIAlertViewDelegate>{
     UITableView *_detailTableView;
     DDTextBoxView *_textBoxView;
     EvaluationDetailModel *_evaluationDetailModel;
@@ -99,6 +99,7 @@ typedef NS_ENUM(NSInteger, IdPartType){
     _isLoadingMore = NO;
     
     [WXApiManager sharedManager].delegate = self;
+    [WBApiManager sharedManager].delegate = self;
     [self showMoreOperationBtn];
     [self initDataTableView];
     [self addRefreshView];
@@ -120,6 +121,7 @@ typedef NS_ENUM(NSInteger, IdPartType){
 
 - (void)dealloc {
     [WXApiManager sharedManager].delegate = nil;
+    [WBApiManager sharedManager].delegate = nil;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -219,10 +221,10 @@ typedef NS_ENUM(NSInteger, IdPartType){
             break;
         case 3:
         {
-            __weak typeof(self) _weakSelf = self;
-            [QQHelper shareImageMsg:[self getFirstEvaluationItem].title description:[self getFirstEvaluationItem].content scene:QQShareScene_QZone callBack:^(QQApiSendResultCode sendResult){
-                [_weakSelf sendUserShare:UserLikeType_Evaluation itemId:_evaluateId];
-            }];
+            _shareScene = ShareScene_Weibo;
+            UIImage *tmpImage = [UIImage imageWithContentsOfFile:KShareImagePath];
+            NSData *imageData = UIImageJPEGRepresentation(tmpImage, 1.0);
+            [WBApiRequestHandler sendWeiboImageData:imageData];
         }
             break;
         default:
@@ -323,13 +325,8 @@ typedef NS_ENUM(NSInteger, IdPartType){
     _textBoxView = [[DDTextBoxView alloc] initWithFrame:CGRectMake(0, kFrameHeight - TEXT_BOX_FIELD_HEIGHT, kFrameWidth, TEXT_BOX_FIELD_HEIGHT)];
     _textBoxView.myDelegate = self;
     _textBoxView.isSelfEvalu = self.isSelfEvaluation;
-    _textBoxView.isUserLike = self.isPraised;
-    [_textBoxView setBackgroundColor:[UIColor whiteColor]];
     [self.view addSubview:_textBoxView];
-}
-
-- (void)resetTextBoxViewState {
-    _textBoxView.isUserLike = ([self getFirstEvaluationItem].isPraised == PraisedState_YES)?YES:NO;
+//    [_textBoxView setConstraints:0 bottom:0 width:kFrameWidth height:TEXT_BOX_FIELD_HEIGHT];
 }
 
 - (void)addRefreshView {
@@ -502,6 +499,25 @@ typedef NS_ENUM(NSInteger, IdPartType){
     NSLog(@"commentButtonClick");
 }
 
+#pragma mark - WBApiManagerDelegate
+- (void)wbApiManagerDidRecvMessageResponse:(WBSendMessageToWeiboResponse *)response {
+    NSString *strMsg = [NSString stringWithFormat:@"errcode:%ld", (long)response.statusCode];
+    if ((NSInteger)response.statusCode == 0) {
+        [self sendUserShare:UserLikeType_Evaluation itemId:_evaluateId];
+        NSString* accessToken = [response.authResponse accessToken];
+        if (accessToken) {
+            [QiuPaiUserModel getUserInstance].wbtoken = accessToken;
+        }
+        NSString* userID = [response.authResponse userID];
+        if (userID) {
+            [QiuPaiUserModel getUserInstance].wbCurrentUserID = userID;
+        }
+    } else {
+        NSLog(@"分享失败 %@", strMsg);
+    }
+}
+
+
 #pragma mark - WXApiManagerDelegate
 - (void)managerDidRecvMessageResponse:(SendMessageToWXResp *)response {
     NSString *strMsg = [NSString stringWithFormat:@"errcode:%d", response.errCode];
@@ -568,7 +584,6 @@ typedef NS_ENUM(NSInteger, IdPartType){
                     [_detailTableView.mj_footer resetNoMoreData];
                 }
                 
-                _textBoxView.isUserLike = [self getFirstEvaluationItem].isPraised == PraisedState_YES ? YES:NO;
                 if (_isShowKeyBoard) {
                     [_textBoxView displayKeyBoard];
                     _isShowKeyBoard = NO;
@@ -679,7 +694,6 @@ typedef NS_ENUM(NSInteger, IdPartType){
             NSDictionary *dataDic = [dic objectForKey:@"returnData"];
             NSInteger itemId = [[dataDic objectForKey:@"itemId"] integerValue];
             for (int i = 0; i < [_evaluationDetailModel.contData count]; i ++) {
-                
                 SubEvaluationModel *tmpModel = [_evaluationDetailModel.contData objectAtIndex:i];
                 if (tmpModel.itemId == itemId || _evaluationDetailModel.evaluateId == itemId) {
                     tmpModel.isPraised = [[dataDic objectForKey:@"isPraised"] integerValue];
@@ -688,9 +702,6 @@ typedef NS_ENUM(NSInteger, IdPartType){
                     tmpModel.praiseList = [[NSMutableArray alloc] initWithArray:zanArr];
                     NSIndexPath *te=[NSIndexPath indexPathForRow:i inSection:0];
                     [_detailTableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:te, nil] withRowAnimation:UITableViewRowAnimationNone];
-                    if (i == 0) {
-                        [self resetTextBoxViewState];
-                    }
                     return;
                 }
             }
@@ -779,7 +790,7 @@ typedef NS_ENUM(NSInteger, IdPartType){
     if (RequestID_UploadImage == requestID) {
         _imageWaitToUploadCount --;
         if (_imageWaitToUploadCount == 0) {
-            [self sendEvaluation];
+//            [self sendEvaluation];
         }
     } else if (RequestID_GetEvaluationDetailInfo == requestID) {
         [self.netIndicatorView hide];

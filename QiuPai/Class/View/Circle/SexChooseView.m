@@ -87,6 +87,6 @@
         [maleBtn setSelected:NO];
         [maleBtn setBackgroundColor:mUIColorWithRGB(189, 231, 244)];
     }
-    [self.myDelegate sexChooseDone:sex];
+//    [self.myDelegate sexChooseDone:sex];
 }
 @end

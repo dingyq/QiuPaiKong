@@ -101,10 +101,6 @@
     _textBoxView = [[DDTextBoxView alloc] initWithFrame:CGRectMake(0, kFrameHeight - TEXT_BOX_FIELD_HEIGHT, kFrameWidth, TEXT_BOX_FIELD_HEIGHT)];
     _textBoxView.myDelegate = self;
     _textBoxView.isSelfEvalu = NO;
-//    _textBoxView.isUserLike = self.isLike;
-    _textBoxView.isShowLike = NO;
-    
-    [_textBoxView setBackgroundColor:[UIColor whiteColor]];
     [self.view addSubview:_textBoxView];
 }
 
@@ -208,7 +204,6 @@
                 if (_placeHodlerStr && ![_placeHodlerStr isEqualToString:@""]) {
                     _textBoxView.textView.placeholder = _placeHodlerStr;
                 }
-                _textBoxView.isReply = YES;
             }
             
         } else {
@@ -335,7 +330,6 @@
         NSString *nickName = [commentModel messageName];
         [_textBoxView displayKeyBoard];
         _textBoxView.textView.placeholder = [NSString stringWithFormat:@"回复 %@:", nickName];
-        _textBoxView.isReply = YES;
     }   
 }
 

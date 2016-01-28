@@ -37,6 +37,7 @@
         _headView.layer.borderColor = [UIColor whiteColor].CGColor;
         _headView.layer.cornerRadius = 67.0/2;
         _headView.layer.borderWidth = 2.0f;
+        [_headView sd_setImageWithURL:[NSURL URLWithString:@""] placeholderImage:[UIImage imageNamed:@"placeholder_head.png"]];
         [_headView setClipsToBounds:YES];
         [self addSubview:_headView];
         

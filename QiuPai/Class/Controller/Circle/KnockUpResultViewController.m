@@ -106,6 +106,15 @@
             }];
         }
             break;
+            
+        case 4:
+        {
+//            _shareScene = ShareScene_Weibo;
+            UIImage *tmpImage = [UIImage imageWithContentsOfFile:KShareImagePath];
+            NSData *imageData = UIImageJPEGRepresentation(tmpImage, 1.0);
+            [WBApiRequestHandler sendWeiboImageData:imageData];
+        }
+            break;
         default:
             break;
     }

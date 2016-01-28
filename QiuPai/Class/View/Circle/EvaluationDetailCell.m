@@ -407,7 +407,7 @@
             
             NSArray *tagArr = _subEvaluModel.tagInfo;
             float xPosi = CGRectGetMaxX(_tagTipImageView.frame) + 2;
-            float yPosi = _tagTipImageView.frame.origin.y - 2;
+            float yPosi = CGRectGetMinY(_tagTipImageView.frame);
             for (int i = 0; i < [tagArr count]; i++) {
                 NSDictionary *objDic = [tagArr objectAtIndex:i];
                 int goodsId = [[objDic objectForKey:@"goodsId"] intValue]; //商品Id
@@ -426,12 +426,13 @@
                 [tagBtn setTitle:goodsName forState:UIControlStateHighlighted];
                 [tagBtn setTitle:goodsName forState:UIControlStateDisabled];
                 [tagBtn setTag:goodsId];
-                
-                CGRect btnFrame = [goodsName boundingRectWithSize:CGSizeMake(100, 20) options:NSStringDrawingUsesLineFragmentOrigin  attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:FS_PC_TAG]} context:nil];
-                [tagBtn setFrame:CGRectMake(xPosi, yPosi, btnFrame.size.width, 20)];
+                [tagBtn sizeToFit];
+
+                CGRect btnFrame = tagBtn.frame;
+                [tagBtn setFrame:CGRectMake(xPosi, yPosi, btnFrame.size.width, 15)];
                 [self.contentView addSubview:tagBtn];
-                xPosi = xPosi + btnFrame.size.width;
                 
+                xPosi = xPosi + CGRectGetMaxX(tagBtn.frame);
                 if (i != [tagArr count]-1) {
                     CGRect commaFrame = [@", " boundingRectWithSize:CGSizeMake(100, 20) options:NSStringDrawingUsesLineFragmentOrigin  attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:11.0f]} context:nil];
                     UILabel *commaLabel = [self.contentView viewWithTag:-101];

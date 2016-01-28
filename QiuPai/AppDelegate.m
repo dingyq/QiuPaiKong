@@ -10,6 +10,7 @@
 #import "QiuPaiUserModel.h"
 #import "QiuPaiUser.h"
 #import "WXApiManager.h"
+#import "WBApiManager.h"
 
 @interface AppDelegate () 
 
@@ -67,27 +68,16 @@
     // 向微信注册
     [WXApi registerApp:KWXAppId withDescription:@"qiupaikong"];
     
-    // QQ
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loginSuccessed) name:kLoginSuccessed object:[QQSdkCall getInstance]];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loginFailed) name:kLoginFailed object:[QQSdkCall getInstance]];
+    [QQSdkCall getInstance];
+    
+    
+    // 游族短信
+//    [SMSSDK registerApp:KMobAppKey withSecret:KMobAppSecret];
+    
+    [WeiboSDK enableDebugMode:YES];
+    [WeiboSDK registerApp:kWBAppKey];
     
     return YES;
-}
-
-
-#pragma mark -
-#pragma mark qq login notify back
-
--(void)loginSuccessed{
-    NSLog(@"loginSuccessed");
-//    NSString* openId = [[[QQSdkCall getInstance] oauth] openId];
-//    NSString* accessToken = [[[QQSdkCall getInstance] oauth] accessToken];
-//    NSDictionary* dataDic = [[NSDictionary alloc] initWithObjectsAndKeys:openId, @"openId", accessToken, @"accessToken", @"0", @"errCode", nil];
-}
-
--(void)loginFailed{
-    NSLog(@"loginFailed");
-//    NSDictionary* dataDic = [[NSDictionary alloc] initWithObjectsAndKeys:@"", @"openId", @"", @"accessToken", @"-1", @"errCode", nil];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
@@ -158,11 +148,12 @@
     if ([headStr isEqualToString:KWXAppId]) {
         NSLog(@"weixin");
         return [WXApi handleOpenURL:url delegate:[WXApiManager sharedManager]];
-    } else
-//        if([headStr isEqualToString:[NSString stringWithFormat:@"tencent%@", KQQAppId]])
-         {
+    } else if([headStr isEqualToString:[NSString stringWithFormat:@"tencent%@", KQQAppId]]) {
         NSLog(@"qq");
         return [TencentOAuth HandleOpenURL:url];
+    }  else {
+        NSLog(@"weibo");
+        return [WeiboSDK handleOpenURL:url delegate:[WBApiManager sharedManager]];
     }
 }
 
@@ -175,11 +166,11 @@
     } else if([headStr isEqualToString:[NSString stringWithFormat:@"tencent%@", KQQAppId]]) {
         NSLog(@"qq");
         return [TencentOAuth HandleOpenURL:url];
-    } else
-//        if ([headStr isEqualToString:Url_Schema_Header_Qpk])
-    {
-        
+    } else if ([headStr isEqualToString:Url_Schema_Header_Qpk]) {
         return YES;
+    } else {
+        NSLog(@"weibo");
+        return [WeiboSDK handleOpenURL:url delegate:[WBApiManager sharedManager]];
     }
 }
 

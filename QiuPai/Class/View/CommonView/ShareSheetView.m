@@ -52,9 +52,14 @@
         [_scrollView setScrollEnabled:YES];
         _scrollView.backgroundColor = [UIColor whiteColor];
         
+//        CGFloat sViewW = kFrameWidth;
         CGFloat itemWidth = 50.0f;
         NSUInteger count = config.count;
         CGFloat gap = (self.scrollView.frame.size.width - count*itemWidth)/(count+1);
+        gap = gap <= 15.0f ? 23.0f:gap;
+//        if (count > 4) {
+//            sViewW = gap*(count + 1) + itemWidth*count;
+//        }
         CGFloat itemX = gap;
         for (int i = 0; i < count ; i++) {
             NSDictionary *configDic = [config objectAtIndex:i];

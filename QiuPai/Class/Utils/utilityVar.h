@@ -11,6 +11,13 @@
 
 #define PATH_OF_DOCUMENT [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0]
 
+#define Request_Base @"http://qiupai.co/qpkServer/"
+//#define Request_Base @"http://biubiu.co/qpkServer/"
+
+#define Request_Base_Url [NSString stringWithFormat:@"%@%@", Request_Base, @"cgi/user_svc.php"]
+#define Request_UploadImage_Url [NSString stringWithFormat:@"%@%@", Request_Base, @"picCgi/evapic_upload.php"]
+#define kPrivatePolicyH5Url [NSString stringWithFormat:@"%@%@", Request_Base, @"othfile/privacypolicy.html"]
+
 #define Request_Channel @"AppStore"
 #define Request_Platform @"iOS"
 #define Request_Version [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"]
@@ -36,7 +43,6 @@
 #define CustomGreenColor mUIColorWithRGB(3, 189, 119)
 #define LineViewColor mUIColorWithRGB(225, 225, 225)
 #define VCViewBGColor mUIColorWithRGB(240, 240, 240)
-
 #define Gray17Color mUIColorWithRGB(17, 17, 17)
 #define Gray51Color mUIColorWithRGB(51, 51, 51)
 #define Gray85Color mUIColorWithRGB(85, 85, 85)
@@ -50,11 +56,8 @@
 #define Gray233Color mUIColorWithRGB(233, 233, 233)
 #define Gray240Color mUIColorWithRGB(240, 240, 240)
 
-static NSInteger kPageSizeCount = 10;
-
 #define FS_COMMON_PROMPT 15.0f
 // 评测字号
-//#define FS_PC_CONTENT 14.0f
 #define FS_PC_CONTENT 15.0f
 #define FS_PC_TITLE 16.0f
 #define FS_PC_NAME 13.0f
@@ -80,7 +83,6 @@ static NSInteger kPageSizeCount = 10;
 
 // 系统版本
 #define KSystemVersion [[[UIDevice currentDevice] systemVersion] floatValue]
-//#define KSystemVersion [[[UIDevice currentDevice] systemVersion] floatValue]
 
 #define SYSTEM_VERSION_7 (KSystemVersion >= 7.0 && KSystemVersion < 8.0)
 #define SYSTEM_VERSION_8 (KSystemVersion >= 8.0 && KSystemVersion < 9.0)
@@ -90,9 +92,25 @@ static NSInteger kPageSizeCount = 10;
 
 // AppStore下载链接
 #define AppStoreUrlString @"https://itunes.apple.com/cn/app/id1068870786"
-//#define AppStoreUrlString @"itms-apps://itunes.apple.com/cn/app/zhi-xing-huo-che-piao-for/id651323845?mt=8"
 
 #define Url_Schema_Header_Qpk @"qiupaikong"
+
+// 游族短信
+//#define KMobAppKey @"e4987d73eeed"
+//#define KMobAppSecret @"d3c9a7b82a404eaf6beaa776751e3b62"
+
+static NSInteger kPageSizeCount = 10;
+
+static NSInteger kPhoneNumCount = 11;
+static NSInteger kPwdMinCount = 6;
+static NSInteger kPwdMaxCount = 18;
+static NSInteger kTotalTime = 60;
+static NSInteger kMobileCodeCount = 6;
+static NSInteger kNickCount = 20;
+
+// 新浪微博
+#define kWBAppKey         @"2127662396"
+#define kWBRedirectURI    @"https://api.weibo.com/oauth2/default.html"
 
 // 友盟统计
 #define KUMengAppKey @"568a6864e0f55aac960035cb"
@@ -102,12 +120,15 @@ static NSString *kEventWxShareSession = @"event_WeixinShareSession";
 static NSString *kEventGotoBuyPage = @"event_GotoBuyPage";
 static NSString *kEventQQShareSession = @"event_QQShareSession";
 static NSString *kEventQQShareQZone = @"event_QQShareQZone";
+static NSString *kEventWeiboShare = @"event_WeiboShare";
 
 // qq相关
 #define kLoginSuccessed @"loginSuccessed"
 #define kLoginFailed    @"loginFailed"
 #define KQQAppId @"1105067664"
 #define KQQAppKey @"9fEw5qBo1rdYEzix"
+#define kQQRedirectURI @"http://www.qiupai.co/"
+
 
 // 微信相关
 #define KWXAppId @"wxed3010d6d64e229e"
@@ -164,5 +185,10 @@ static NSString *kShareThumbImage = @"share_thumb_image_generate.jpg";
 #define IdentifierModifyRacketUsedVC @"toModifyRacketUsed"
 
 #define IdentifierUserRegisterVC @"toUserRegisterVC"
+#define IdentifierAuthCodeVC @"toAuthCodeVC"
+#define IdentifierPwdLoginVC @"toPwdLoginVC"
+#define IdentifierFindPwdVC @"toFindPwdVC"
+
+#define IdentifierPrivatePolicyVC @"toPrivatePolicyVC"
 
 #endif /* utilityVar_h */

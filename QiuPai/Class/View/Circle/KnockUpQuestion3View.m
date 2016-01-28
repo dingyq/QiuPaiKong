@@ -100,12 +100,14 @@
 
 - (void)resetView:(NSInteger)selfEvalu playFreq:(NSInteger)playFreq {
     NSArray *btnsArr = [_playYearView subviews];
+    selfEvalu = (selfEvalu > 0 && selfEvalu < 5) ? selfEvalu : 1;
+//    [self.myDelegate selfEveluateChooseDone:selfEvalu];
     for (UIButton *btn in btnsArr) {
         if ([NSStringFromClass([btn class]) isEqualToString:NSStringFromClass([UIButton class])]) {
-            selfEvalu = (selfEvalu > 0 && selfEvalu < 5) ? selfEvalu : 1;
             if (btn.tag == selfEvalu*100) {
                 [btn setSelected:YES];
                 [btn setBackgroundColor:CustomGreenColor];
+                
             } else {
                 [btn setSelected:NO];
                 [btn setBackgroundColor:mUIColorWithRGB(239, 247, 244)];
@@ -114,9 +116,10 @@
     }
     
     NSArray *btnsArr1 = [_playFrequencyView subviews];
+    playFreq = (playFreq > 0 && playFreq < 5) ? playFreq : 1;
+//    [self.myDelegate playFrequencyChooseDone:playFreq];
     for (UIButton *btn in btnsArr1) {
         if ([NSStringFromClass([btn class]) isEqualToString:NSStringFromClass([UIButton class])]) {
-            playFreq = (playFreq > 0 && playFreq < 5) ? playFreq : 1;
             if (btn.tag == playFreq*100) {
                 [btn setSelected:YES];
                 [btn setBackgroundColor:CustomGreenColor];
