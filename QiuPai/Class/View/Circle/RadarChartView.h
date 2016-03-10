@@ -11,4 +11,5 @@
 @interface RadarChartView : UIView
 
 @property (nonatomic, strong) NSArray *userPropertyArr;
+    
 @end

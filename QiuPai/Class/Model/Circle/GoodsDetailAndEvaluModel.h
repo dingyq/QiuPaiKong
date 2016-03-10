@@ -28,8 +28,8 @@
 @property (nonatomic, assign) CGFloat beamwidthC;
 @property (nonatomic, copy) NSString *color;
 @property (nonatomic, assign) CGFloat length;
-@property (nonatomic, assign) NSInteger price;
-@property (nonatomic, assign) NSInteger oriPrice;
+@property (nonatomic, assign) CGFloat price;
+@property (nonatomic, assign) CGFloat oriPrice;
 @property (nonatomic, assign) NSInteger likeNum;
 @property (nonatomic, assign) NSInteger isLike;
 @property (nonatomic, assign) NSInteger shareNum;

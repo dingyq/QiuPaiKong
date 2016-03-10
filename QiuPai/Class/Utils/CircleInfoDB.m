@@ -27,6 +27,7 @@
         shareInstance = [[self alloc] init];
         [shareInstance createTable];
     });
+    
     return shareInstance;
 }
 

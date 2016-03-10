@@ -38,12 +38,12 @@
         [_nameLabel setTextAlignment:NSTextAlignmentLeft];
         [self.contentView addSubview:_nameLabel];
         
-        _levelLabel = [[UILabel alloc] initWithFrame:CGRectMake(_nameLabel.frame.origin.x, _nameLabel.frame.origin.y + _nameLabel.frame.size.height + 3, 60, 20)];
+        _levelLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMinX(_nameLabel.frame), CGRectGetMaxY(_nameLabel.frame) + 3, 0, 20)];
         [_levelLabel setTextColor:Gray153Color];
         [_levelLabel setBackgroundColor:[UIColor clearColor]];
         [_levelLabel setFont:[UIFont systemFontOfSize:12.0]];
         [_levelLabel setTextAlignment:NSTextAlignmentLeft];
-        [self.contentView addSubview:_levelLabel];
+//        [self.contentView addSubview:_levelLabel];
         
         _sexLabel = [[UILabel alloc] initWithFrame:CGRectMake(60, 10, kFrameWidth/2, 20)];
         [_sexLabel setTextColor:Gray51Color];
@@ -59,7 +59,7 @@
         [_ageLabel setTextAlignment:NSTextAlignmentLeft];
 //        [self.contentView addSubview:_ageLabel];
         
-        _playYearLabel = [[UILabel alloc] initWithFrame:CGRectMake(86, _levelLabel.frame.origin.y, kFrameWidth/2, 20)];
+        _playYearLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMinX(_levelLabel.frame), CGRectGetMinY(_levelLabel.frame), kFrameWidth/2, 20)];
         [_playYearLabel setTextColor:Gray153Color];
         [_playYearLabel setBackgroundColor:[UIColor clearColor]];
         [_playYearLabel setFont:[UIFont systemFontOfSize:12.0]];
@@ -97,7 +97,8 @@
     [_nameLabel setText:infoModel.name];
     [_nameLabel sizeToFit];
     
-    [_levelLabel setText:@"L2"];
+//    [_levelLabel setText:@"L2"];
+    [_levelLabel setText:@""];
     [_levelLabel sizeToFit];
     
     NSString *sexStr = @"男";

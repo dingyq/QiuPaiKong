@@ -11,8 +11,8 @@
 
 #define PATH_OF_DOCUMENT [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0]
 
-//#define Request_Base @"http://qiupai.co/qpkServer/"
-#define Request_Base @"http://biubiu.co/qpkServer/"
+#define Request_Base @"http://qiupai.co/qpkServer/"
+//#define Request_Base @"http://biubiu.co/qpkServer/"
 
 #define Request_Base_Url [NSString stringWithFormat:@"%@%@", Request_Base, @"cgi/user_svc.php"]
 #define Request_UploadImage_Url [NSString stringWithFormat:@"%@%@", Request_Base, @"picCgi/evapic_upload.php"]

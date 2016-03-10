@@ -39,7 +39,7 @@ typedef NS_ENUM(NSInteger, PickerType) {
 //    NSInteger _powerSelfEveluate;//力量自评 1不参加 2偶尔 3一周一次 4一周三次及以上
 //    NSInteger _injuries;        //伤病史 1有 2无 3不清楚
 //    NSInteger _region;          //活动区域 1没打过 2全场 3网前 4底线附近 5底线后
-//    NSInteger _style;           //击球风格 1没打过 2上旋 3平击
+//    NSInteger _style;           //击球风格 1没打过 2旋转 3平击
     
     UIScrollView *_contentScrollView;
     CGFloat _contentSVHeight;
@@ -63,7 +63,7 @@ typedef NS_ENUM(NSInteger, PickerType) {
 @property (nonatomic, assign) NSInteger powerSelfEveluate;//力量自评 1不参加 2偶尔 3一周一次 4一周三次及以上
 @property (nonatomic, assign) NSInteger injuries;        //伤病史 1有 2无 3不清楚
 @property (nonatomic, assign) NSInteger region;          //活动区域 1没打过 2全场 3网前 4底线附近 5底线后
-@property (nonatomic, assign) NSInteger style;           //击球风格 1没打过 2上旋 3平击
+@property (nonatomic, assign) NSInteger style;           //击球风格 1没打过 2旋转 3平击
 
 @end
 

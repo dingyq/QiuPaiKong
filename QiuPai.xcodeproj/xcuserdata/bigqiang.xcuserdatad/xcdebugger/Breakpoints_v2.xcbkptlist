@@ -379,11 +379,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "QiuPai/Class/Controller/PreciseSelect/SearchViewController.m"
-            timestampString = "474544304.690554"
+            timestampString = "478448501.015241"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "251"
-            endingLineNumber = "251"
+            startingLineNumber = "270"
+            endingLineNumber = "270"
             landmarkName = "-tableView:cellForRowAtIndexPath:"
             landmarkType = "5">
          </BreakpointContent>
@@ -395,11 +395,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "QiuPai/Class/Controller/PreciseSelect/SearchViewController.m"
-            timestampString = "474544304.690554"
+            timestampString = "478448501.015241"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "250"
-            endingLineNumber = "250"
+            startingLineNumber = "269"
+            endingLineNumber = "269"
             landmarkName = "-tableView:cellForRowAtIndexPath:"
             landmarkType = "5">
          </BreakpointContent>
@@ -843,11 +843,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "QiuPai/Class/Controller/PreciseSelect/SearchViewController.m"
-            timestampString = "474544304.690554"
+            timestampString = "478448501.015241"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "242"
-            endingLineNumber = "242"
+            startingLineNumber = "261"
+            endingLineNumber = "261"
             landmarkName = "-tableView:numberOfRowsInSection:"
             landmarkType = "5">
          </BreakpointContent>
@@ -859,11 +859,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "QiuPai/Class/View/PreciseSelect/SearchResultCell.m"
-            timestampString = "474291876.694522"
+            timestampString = "478448377.193427"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "109"
-            endingLineNumber = "109"
+            startingLineNumber = "123"
+            endingLineNumber = "123"
             landmarkName = "-gotoBuyButtonClick:"
             landmarkType = "5">
          </BreakpointContent>
@@ -875,11 +875,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "QiuPai/Class/Controller/PreciseSelect/SearchViewController.m"
-            timestampString = "474544304.690554"
+            timestampString = "478446583.851423"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "93"
-            endingLineNumber = "93"
+            startingLineNumber = "98"
+            endingLineNumber = "98"
             landmarkName = "-performSegueWithIdentifier:sender:"
             landmarkType = "5">
          </BreakpointContent>
@@ -907,11 +907,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "QiuPai/Class/Controller/Circle/GoodsDetailAndEvaViewController.m"
-            timestampString = "475582645.324993"
+            timestampString = "478445994.162173"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "975"
-            endingLineNumber = "975"
+            startingLineNumber = "985"
+            endingLineNumber = "985"
             landmarkName = "-tableView:didSelectRowAtIndexPath:"
             landmarkType = "5">
          </BreakpointContent>
@@ -923,11 +923,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "QiuPai/Class/Controller/Circle/GoodsDetailAndEvaViewController.m"
-            timestampString = "475582645.324993"
+            timestampString = "478445994.162173"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "980"
-            endingLineNumber = "980"
+            startingLineNumber = "990"
+            endingLineNumber = "990"
             landmarkName = "-tableView:didSelectRowAtIndexPath:"
             landmarkType = "5">
          </BreakpointContent>
@@ -939,11 +939,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "QiuPai/Class/Controller/Circle/GoodsDetailAndEvaViewController.m"
-            timestampString = "475582645.324993"
+            timestampString = "478445994.162173"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1042"
-            endingLineNumber = "1042"
+            startingLineNumber = "1052"
+            endingLineNumber = "1052"
             landmarkName = "-tableView:heightForFooterInSection:"
             landmarkType = "5">
          </BreakpointContent>
@@ -955,11 +955,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "QiuPai/Class/Controller/Circle/GoodsDetailAndEvaViewController.m"
-            timestampString = "475582645.324993"
+            timestampString = "478445994.162173"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "831"
-            endingLineNumber = "831"
+            startingLineNumber = "841"
+            endingLineNumber = "841"
             landmarkName = "-netWorkFinishedCallBack:withRequestID:"
             landmarkType = "5">
          </BreakpointContent>
@@ -1499,11 +1499,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "QiuPai/Class/View/PreciseSelect/SearchResultCell.m"
-            timestampString = "474291876.694522"
+            timestampString = "478448377.193427"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "100"
-            endingLineNumber = "100"
+            startingLineNumber = "109"
+            endingLineNumber = "109"
             landmarkName = "-bindCellWithDataModel:showBuyBtn:"
             landmarkType = "5">
          </BreakpointContent>
@@ -1691,11 +1691,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "QiuPai/Class/Controller/Circle/GoodsDetailAndEvaViewController.m"
-            timestampString = "475582645.324993"
+            timestampString = "478445994.162173"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "915"
-            endingLineNumber = "915"
+            startingLineNumber = "925"
+            endingLineNumber = "925"
             landmarkName = "-netWorkFinishedCallBack:withRequestID:"
             landmarkType = "5">
          </BreakpointContent>
@@ -2011,11 +2011,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "QiuPai/Class/View/PreciseSelect/SearchResultCell.m"
-            timestampString = "474291876.694522"
+            timestampString = "478448377.193427"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "113"
-            endingLineNumber = "113"
+            startingLineNumber = "127"
+            endingLineNumber = "127"
             landmarkName = "-gotoBuyButtonClick:"
             landmarkType = "5">
          </BreakpointContent>
@@ -2045,11 +2045,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "QiuPai/Class/Controller/PreciseSelect/SearchViewController.m"
-            timestampString = "474544304.690554"
+            timestampString = "478446583.851423"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "67"
-            endingLineNumber = "67"
+            startingLineNumber = "72"
+            endingLineNumber = "72"
             landmarkName = "-touchesBegan:withEvent:"
             landmarkType = "5">
          </BreakpointContent>
@@ -2061,11 +2061,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "QiuPai/Class/Controller/PreciseSelect/SearchViewController.m"
-            timestampString = "474544304.690554"
+            timestampString = "478446583.851423"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "164"
-            endingLineNumber = "164"
+            startingLineNumber = "169"
+            endingLineNumber = "169"
             landmarkName = "-scrollViewDidScroll:"
             landmarkType = "5">
          </BreakpointContent>
@@ -2125,11 +2125,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "QiuPai/Class/Controller/PreciseSelect/SearchViewController.m"
-            timestampString = "474544304.690554"
+            timestampString = "478448501.015241"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "303"
-            endingLineNumber = "303"
+            startingLineNumber = "333"
+            endingLineNumber = "333"
             landmarkName = "-netWorkFinishedCallBack:withRequestID:"
             landmarkType = "5">
          </BreakpointContent>
@@ -3086,11 +3086,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "QiuPai/Class/Controller/Circle/GoodsDetailAndEvaViewController.m"
-            timestampString = "475582645.324993"
+            timestampString = "478445994.162173"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "684"
-            endingLineNumber = "684"
+            startingLineNumber = "694"
+            endingLineNumber = "694"
             landmarkName = "-updateRacketParameterView"
             landmarkType = "5">
          </BreakpointContent>
@@ -3694,11 +3694,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "QiuPai/Class/Controller/Me/ModifyRacketViewController.m"
-            timestampString = "474185625.931517"
+            timestampString = "478344053.522691"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "76"
-            endingLineNumber = "76"
+            startingLineNumber = "78"
+            endingLineNumber = "78"
             landmarkName = "-racketModel"
             landmarkType = "5">
          </BreakpointContent>
@@ -3710,11 +3710,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "QiuPai/Class/Controller/Me/ModifyRacketViewController.m"
-            timestampString = "474185625.931517"
+            timestampString = "478344053.522691"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "112"
-            endingLineNumber = "112"
+            startingLineNumber = "122"
+            endingLineNumber = "122"
             landmarkName = "-sendSearchResult:"
             landmarkType = "5">
          </BreakpointContent>
@@ -3726,11 +3726,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "QiuPai/Class/Controller/PreciseSelect/SearchViewController.m"
-            timestampString = "474544304.690554"
+            timestampString = "478448501.015241"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "269"
-            endingLineNumber = "269"
+            startingLineNumber = "299"
+            endingLineNumber = "299"
             landmarkName = "-tableView:didSelectRowAtIndexPath:"
             landmarkType = "5">
          </BreakpointContent>
@@ -3806,11 +3806,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "QiuPai/Class/Controller/Circle/GoodsDetailAndEvaViewController.m"
-            timestampString = "475582645.324993"
+            timestampString = "478445994.162173"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "723"
-            endingLineNumber = "723"
+            startingLineNumber = "733"
+            endingLineNumber = "733"
             landmarkName = "-publishNewEvaluationSuccess:"
             landmarkType = "5">
          </BreakpointContent>
@@ -4733,11 +4733,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "QiuPai/Class/Controller/Circle/GoodsDetailAndEvaViewController.m"
-            timestampString = "475582645.324993"
+            timestampString = "478445994.162173"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "834"
-            endingLineNumber = "834"
+            startingLineNumber = "844"
+            endingLineNumber = "844"
             landmarkName = "-netWorkFinishedCallBack:withRequestID:"
             landmarkType = "5">
          </BreakpointContent>
@@ -5149,11 +5149,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "QiuPai/Class/Controller/Circle/GoodsDetailAndEvaViewController.m"
-            timestampString = "475582645.324993"
+            timestampString = "478445994.162173"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "933"
-            endingLineNumber = "933"
+            startingLineNumber = "943"
+            endingLineNumber = "943"
             landmarkName = "-netWorkFinishedCallBack:withRequestID:"
             landmarkType = "5">
          </BreakpointContent>
@@ -5203,6 +5203,38 @@
             startingLineNumber = "588"
             endingLineNumber = "588"
             landmarkName = "-netWorkFinishedCallBack:withRequestID:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "QiuPai/Class/View/Circle/EvalGoodsSimpleInfoView.m"
+            timestampString = "478344154.631457"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "174"
+            endingLineNumber = "174"
+            landmarkName = "-showGoodsSelectTip:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "QiuPai/Class/View/Circle/EvalGoodsSimpleInfoView.m"
+            timestampString = "478344154.631457"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "172"
+            endingLineNumber = "172"
+            landmarkName = "-showGoodsSelectTip:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

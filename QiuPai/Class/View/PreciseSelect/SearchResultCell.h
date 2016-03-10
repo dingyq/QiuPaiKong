@@ -15,4 +15,5 @@
 
 - (void)bindCellWithDataModel:(RacketSearchModel *) infoModel showBuyBtn:(BOOL)isShow;
 
+- (void)showLoadMoreTip:(NSString *)tip;
 @end

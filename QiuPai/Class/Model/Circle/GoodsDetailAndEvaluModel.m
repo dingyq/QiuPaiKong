@@ -34,8 +34,8 @@
     self.beamwidthC = [[attributes objectForKey:@"beamwidthC"] floatValue];
     self.color = [attributes objectForKey:@"color"];
     self.length = [[attributes objectForKey:@"length"] floatValue];
-    self.price = [[attributes objectForKey:@"price"] integerValue];
-    self.oriPrice = [[attributes objectForKey:@"oriPrice"] integerValue];
+    self.price = [[attributes objectForKey:@"price"] floatValue];
+    self.oriPrice = [[attributes objectForKey:@"oriPrice"] floatValue];
     self.likeNum = [[attributes objectForKey:@"likeNum"] integerValue];
     self.isLike = [[attributes objectForKey:@"isLike"] integerValue];
     self.shareNum = [[attributes objectForKey:@"shareNum"] integerValue];

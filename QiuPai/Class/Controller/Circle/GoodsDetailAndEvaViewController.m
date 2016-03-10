@@ -565,7 +565,7 @@
             }
         }
         case GoodsType_RacketLine:
-            return 96.0f;
+            return 96.0f + 26.0f;
         default:
             return 177.0f;
     }
@@ -577,7 +577,7 @@
                            @"挥重:", @"平衡点:", @"边框厚度:"];
 //    @"市场价:",
     if (_goodsEvaluModel.type == GoodsType_RacketLine) {
-        tipStrArr = @[@"生产商:", @"直径:", @"颜色:", @"材料:", @"结构:", @"特性:"];
+        tipStrArr = @[@"生产商:", @"直径:", @"颜色:", @"材料:", @"结构:", @"特性:", @"价格:"];
     } else {
         if (_goodsEvaluModel.isJunior == JuniorRacket_YES) {
             // 儿童拍
@@ -608,10 +608,15 @@
                 break;
             case 1:
             {
-                tipStr = [NSString stringWithFormat:@"￥%ld", (long)_goodsEvaluModel.price];
-                if (_goodsEvaluModel.price == 0) {
-                    tipStr = @"￥-";
+                if (goodsType == GoodsType_Racket) {
+                    tipStr = [NSString stringWithFormat:@"￥%.0f", _goodsEvaluModel.price];
+                    if (_goodsEvaluModel.price > -0.000001 && _goodsEvaluModel.price < 0.000001) {
+                        tipStr = @"￥-";
+                    }
+                } else if (goodsType == GoodsType_RacketLine) {
+                    tipStr = [NSString stringWithFormat:@"%.2fmm", _goodsEvaluModel.dia];
                 }
+                
             }
                 break;
             case 2:
@@ -646,13 +651,18 @@
                 if (goodsType == GoodsType_Racket) {
                     tipStr = [NSString stringWithFormat:@"%.0f平方英寸", _goodsEvaluModel.headSize];
                 } else if (goodsType == GoodsType_RacketLine) {
-                    tipStr = [NSString stringWithFormat:@"%0.2fmm", _goodsEvaluModel.dia];
+                    tipStr = [NSString stringWithFormat:@"%@", _goodsEvaluModel.character];
                 }
             }
                 break;
             case 6:
             {
-                tipStr = [NSString stringWithFormat:@"%.2fg", _goodsEvaluModel.weight];
+                if (goodsType == GoodsType_Racket) {
+                    tipStr = [NSString stringWithFormat:@"%.2fg", _goodsEvaluModel.weight];
+                } else if (goodsType == GoodsType_RacketLine) {
+                    tipStr = [NSString stringWithFormat:@"￥%0.1f", _goodsEvaluModel.price];
+                }
+                
             }
                 break;
             case 7:

@@ -27,7 +27,7 @@
         [self addSubview:_regionView];
         orignY += 227;
         
-        _styleView = [self createQuestionUnitView:CGRectMake(0, orignY, frame.size.width, 215) tipStr:@"10、你更喜欢哪种击球风格？" btnTipArr:@[@"上旋球", @"平击球"] btnClick:@selector(styleBtnClick:)];
+        _styleView = [self createQuestionUnitView:CGRectMake(0, orignY, frame.size.width, 215) tipStr:@"10、你更喜欢哪种击球风格？" btnTipArr:@[@"旋转球", @"平击球"] btnClick:@selector(styleBtnClick:)];
         [self addSubview:_styleView];
     }
     return self;
@@ -63,7 +63,7 @@
     }
     [sender setSelected:YES];
     [sender setBackgroundColor:CustomGreenColor];
-    //击球风格 1、上旋 2、平击
+    //击球风格 1、旋转 2、平击
     [self.myDelegate styleChooseDone:(sender.tag/100)];
 }
 

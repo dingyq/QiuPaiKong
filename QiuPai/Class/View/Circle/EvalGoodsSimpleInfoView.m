@@ -95,7 +95,7 @@
         [_headSizeL setTextAlignment:NSTextAlignmentLeft];
         [self addSubview:_headSizeL];
         
-        _tipLabel = [[UILabel alloc] initWithFrame:CGRectMake(17, frame.size.height/2-10, 90, 20)];
+        _tipLabel = [[UILabel alloc] initWithFrame:CGRectMake(17, frame.size.height/2-10, frame.size.width - 34, 20)];
         [_tipLabel setTextColor:Gray153Color];
         [_tipLabel setBackgroundColor:[UIColor clearColor]];
         [_tipLabel setFont:[UIFont systemFontOfSize:NAME_FONT_SIZE]];
@@ -170,7 +170,13 @@
     [_tipLabel setHidden:NO];
     
     [_tipLabel setText:tipStr];
-    [_tipLabel sizeToFit];
+    if ([tipStr isEqualToString:@""]) {
+        [_tipLabel setTextAlignment:NSTextAlignmentCenter];
+        [_tipLabel setText:@"点击选择你使用的球拍"];
+    } else {
+        [_tipLabel setTextAlignment:NSTextAlignmentLeft];
+    }
+//    [_tipLabel sizeToFit];
 }
 
 @end

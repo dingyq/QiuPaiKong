@@ -19,6 +19,8 @@
     UITableView *_resultTableView;
     
     BOOL _isFirstLoaded;
+    BOOL _loadMoreRacketClick;
+    BOOL _loadMoreRacketLineClick;
 }
 @property (strong, nonatomic) DDRemoteSearchBar *searchBar;
 @property (strong, nonatomic) NSMutableArray  *searchList;
@@ -41,6 +43,9 @@
     // Do any additional setup after loading the view.
     self.searchList = [[NSMutableArray alloc] init];
     _isFirstLoaded = YES;
+    
+    _loadMoreRacketClick = NO;
+    _loadMoreRacketLineClick = NO;
     
     [self initSearchBar];
     [self initResultTableView];
@@ -169,7 +174,17 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     NSArray *itemsArr = [self.searchList objectAtIndex:indexPath.section];
-    RacketSearchModel *tmpModel = [itemsArr objectAtIndex:indexPath.row];
+    NSInteger rowCount = [itemsArr count];
+    NSInteger row = [indexPath row];
+    NSInteger section = [indexPath section];
+    if (rowCount > 10 && row >=10) {
+        if (section == 0 && !_loadMoreRacketClick) {
+            return 30.0f;
+        } else if (section == 1 && !_loadMoreRacketLineClick) {
+            return 30.0f;
+        }
+    }
+    RacketSearchModel *tmpModel = [itemsArr objectAtIndex:row];
     if (tmpModel.type == GoodsSearchType_Racket || tmpModel.type == GoodsSearchType_RacketLine) {
         return [tmpModel getSearchResultCellHeight];
     }
@@ -178,46 +193,44 @@
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     if (_searchType == GoodsSearchType_All) {
-        UILabel *tipLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, kFrameWidth-20, 29.5f)];
-        [tipLabel setTextColor:Gray119Color];
-        [tipLabel setBackgroundColor:[UIColor clearColor]];
-        [tipLabel setFont:[UIFont systemFontOfSize:13.0]];
-        [tipLabel setTextAlignment:NSTextAlignmentLeft];
-        if (section == 0) {
-            [tipLabel setText:@"球拍"];
-        } else {
-            [tipLabel setText:@"球线"];
+        if ([[self.searchList objectAtIndex:section] count] > 0) {
+            UILabel *tipLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, kFrameWidth-20, 29.5f)];
+            [tipLabel setTextColor:Gray119Color];
+            [tipLabel setBackgroundColor:[UIColor clearColor]];
+            [tipLabel setFont:[UIFont systemFontOfSize:13.0]];
+            [tipLabel setTextAlignment:NSTextAlignmentLeft];
+            if (section == 0) {
+                [tipLabel setText:@"球拍"];
+            } else {
+                [tipLabel setText:@"球线"];
+            }
+            [tipLabel setBackgroundColor:[UIColor whiteColor]];
+            UIView *bgView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kFrameWidth, 30.0f)];
+            [bgView setBackgroundColor:[UIColor whiteColor]];
+            [bgView addSubview:tipLabel];
+            
+            UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0, 29.5, kFrameWidth, 0.5f)];
+            [lineView setBackgroundColor:Gray202Color];
+            [bgView addSubview:lineView];
+            
+            return bgView;
         }
-        [tipLabel setBackgroundColor:[UIColor whiteColor]];
-        UIView *bgView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kFrameWidth, 30.0f)];
-        [bgView setBackgroundColor:[UIColor whiteColor]];
-        [bgView addSubview:tipLabel];
-        
-        
-        UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0, 29.5, kFrameWidth, 0.5f)];
-        [lineView setBackgroundColor:Gray202Color];
-        [bgView addSubview:lineView];
-        
-        return bgView;
     }
-    
     return nil;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     if (_searchType == GoodsSearchType_All) {
-        return 30.0f;
+        if ([[self.searchList objectAtIndex:section] count] > 0) {
+            return 30.0f;
+        }
     }
     return 0.0f;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
     if (_searchType == GoodsSearchType_All) {
-        if (section < [self.searchList count]-1) {
-//            UIView *bgView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kFrameWidth, 30.0f)];
-//            [bgView setBackgroundColor:Gray202Color];
-//            return bgView;
-        }
+
     }
     
     return nil;
@@ -225,7 +238,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
     if (_searchType == GoodsSearchType_All) {
-        if (section < [self.searchList count]-1) {
+        if (section == 0 && [[self.searchList objectAtIndex:1] count] > 0) {
             return 5.0f;
         }
     }
@@ -239,7 +252,13 @@
 
 //设置区域的行数
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return [[self.searchList objectAtIndex:section] count];
+    NSInteger rowCount = [[self.searchList objectAtIndex:section] count];
+    if (rowCount > 10) {
+        if ((!_loadMoreRacketClick && section == 0) || (!_loadMoreRacketClick && section == 1)) {
+            return 10+1;
+        }
+    }
+    return rowCount;
 }
 
 //返回单元格内容
@@ -251,6 +270,8 @@
         shouldShowBuyBtn = NO;
     }
     
+    NSInteger section = indexPath.section;
+    NSInteger row = indexPath.row;
     SearchResultCell *cell = [tableView dequeueReusableCellWithIdentifier:flag];
     if (cell == nil) {
         cell = [[SearchResultCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:flag];
@@ -258,6 +279,15 @@
     RacketSearchModel *tmpModel = [itemsArr objectAtIndex:indexPath.row];
     [cell bindCellWithDataModel:tmpModel showBuyBtn:shouldShowBuyBtn];
     cell.myDelegate = self;
+
+    NSInteger rowCount = [[self.searchList objectAtIndex:section] count];
+    if (rowCount > 10 && row >=10) {
+        if (section == 0 && !_loadMoreRacketClick) {
+            [cell showLoadMoreTip:@"查看更多球拍"];
+        } else if (section == 1 && !_loadMoreRacketLineClick) {
+            [cell showLoadMoreTip:@"查看更多球线"];
+        }
+    }
     return cell;
 }
 
@@ -311,19 +341,19 @@
                     RacketSearchModel *tmpModel = [[RacketSearchModel alloc] initWithAttributes:itemDic];
                     [racketItemArr addObject:tmpModel];
                 }
-                if ([racketItemArr count] > 0) {
+//                if ([racketItemArr count] > 0) {
                     [self.searchList addObject:racketItemArr];
-                }
+//                }
                 
                 // 球线
-//                NSArray *racketLineResult = [returnData objectForKey:@"goodsData_2"];
-//                NSMutableArray *racketLineItemArr = [[NSMutableArray alloc] init];
-//                for (NSDictionary *itemDic in racketLineResult) {
-//                    RacketSearchModel *tmpModel = [[RacketSearchModel alloc] initWithAttributes:itemDic];
-//                    [racketLineItemArr addObject:tmpModel];
-//                }
+                NSArray *racketLineResult = [returnData objectForKey:@"goodsData_2"];
+                NSMutableArray *racketLineItemArr = [[NSMutableArray alloc] init];
+                for (NSDictionary *itemDic in racketLineResult) {
+                    RacketSearchModel *tmpModel = [[RacketSearchModel alloc] initWithAttributes:itemDic];
+                    [racketLineItemArr addObject:tmpModel];
+                }
 //                if ([racketLineItemArr count] > 0) {
-//                    [self.searchList addObject:racketLineItemArr];
+                    [self.searchList addObject:racketLineItemArr];
 //                }
                 
             } else {

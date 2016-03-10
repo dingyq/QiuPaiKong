@@ -42,7 +42,7 @@
     tmpModel.thumbPicUrl = @"";
     tmpModel.racName = @"babolat ps200";
     tmpModel.rank = 78;
-    tmpModel.summaryBasic = @"耐打，上旋效果好";
+    tmpModel.summaryBasic = @"耐打，旋转效果好";
     tmpModel.weight = 310;
     tmpModel.featuresRac = @[[NSNumber numberWithInt:74], [NSNumber numberWithInt:33], [NSNumber numberWithInt:72], [NSNumber numberWithInt:40], [NSNumber numberWithInt:45]];
     

@@ -14,6 +14,8 @@
     EvalGoodsSimpleInfoView *_racketInfoView;
     
     BOOL _isFirstLoad;
+    
+    UILabel *_tipLabel;
 }
 
 @end
@@ -81,7 +83,6 @@
 
 - (void)initRacketInfoView {
     CGFloat viewH = 96.0f;
-    
     _racketInfoView = [[EvalGoodsSimpleInfoView alloc] initWithFrame:CGRectMake(0, 64+17, kFrameWidth, viewH)];
     [_racketInfoView setBackgroundColor:[UIColor whiteColor]];
     [_racketInfoView showGoodsSelectTip:@""];
@@ -101,6 +102,15 @@
     UIView *bottomLine = [[UIView alloc] initWithFrame:CGRectMake(0, 95.5, kFrameWidth, 0.5f)];
     [bottomLine setBackgroundColor:LineViewColor];
     [_racketInfoView addSubview:bottomLine];
+    
+    _tipLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(_racketInfoView.frame), viewH)];
+    [_tipLabel setTextColor:Gray153Color];
+    [_tipLabel setBackgroundColor:[UIColor clearColor]];
+    [_tipLabel setFont:[UIFont systemFontOfSize:14.0]];
+    [_tipLabel setTextAlignment:NSTextAlignmentCenter];
+    [_tipLabel setText:@"点击选择你使用的球拍"];
+    [_racketInfoView addSubview:_tipLabel];
+    [_tipLabel setHidden:YES];
 }
 
 - (void)chooseRacketBtnClick:(UIButton *)sender {
