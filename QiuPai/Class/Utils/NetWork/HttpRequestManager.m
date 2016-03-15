@@ -310,6 +310,16 @@
     return info;
 }
 
++ (RequestInfo *)getHotSearchWordsList:(NSDictionary *)requestInfo {
+    RequestInfo *info = [[RequestInfo alloc] init];
+    info.jsonDict = [[NSMutableDictionary alloc] initWithDictionary:requestInfo];
+    [info.jsonDict setObject:[NSNumber numberWithInteger:0x300c] forKey:@"cmd"];
+    info.method = HttpRequestMethod_POST;
+    info.requestID = RequestID_GetHotSearchWords;
+    [[HttpRequestManager shareManager] startAsyncHttpRequestWithRequestInfo:info];
+    return info;
+}
+
 + (RequestInfo *)getGoodsSearchList:(NSDictionary *)requestInfo {
     RequestInfo *info = [[RequestInfo alloc] init];
     info.jsonDict = [[NSMutableDictionary alloc] initWithDictionary:requestInfo];

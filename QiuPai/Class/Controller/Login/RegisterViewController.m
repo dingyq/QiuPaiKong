@@ -7,6 +7,7 @@
 //
 
 #import "RegisterViewController.h"
+#import "CompleteInfoGuideViewController.h"
 
 @interface RegisterViewController() <UITextFieldDelegate, NetWorkDelegate>{
     UITextField *_nickInput;
@@ -42,7 +43,10 @@
 }
 
 - (void)performSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
-
+    if ([IdentifierCompleteInfoGuideVC isEqualToString:identifier]) {
+        CompleteInfoGuideViewController *vc = [[CompleteInfoGuideViewController alloc] init];
+        [self.navigationController pushViewController:vc animated:YES];
+    }
 }
 
 - (void)initPersonInfoView {
@@ -165,7 +169,7 @@
         if ([[dic objectForKey:@"statusCode"] integerValue] == NetWorkJsonResOK) {
             NSDictionary *dataDic = [dic objectForKey:@"returnData"];
             [[QiuPaiUserModel getUserInstance] updateWithDic:dataDic];
-            [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+            [self performSegueWithIdentifier:IdentifierCompleteInfoGuideVC sender:nil];
         } else {
             [self loadingTipView:[dic objectForKey:@"statusInfo"] callBack:nil];
         }

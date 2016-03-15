@@ -7,7 +7,6 @@
 //
 
 #import "MeViewController.h"
-
 #import "FansTBViewController.h"
 #import "QiuPaiUserModel.h"
 #import "UIImageView+WebCache.h"
@@ -333,7 +332,7 @@ static const CGFloat HeadImageViewHeight = 139;
 }
 
 #pragma -mark TableViewDelegate
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {    
     [tableView deselectRowAtIndexPath:[tableView indexPathForSelectedRow] animated:NO];
     BOOL needCheckLogin = YES;
     if (indexPath.section == 2 && indexPath.row == 1) {

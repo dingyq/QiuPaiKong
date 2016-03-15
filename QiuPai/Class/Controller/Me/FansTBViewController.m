@@ -10,6 +10,7 @@
 #import "SimpleUserInfoModel.h"
 #import "UserInfoListCell.h"
 #import "HomePageViewController.h"
+#import "CompleteInfoGuideViewController.h"
 
 @interface FansTBViewController () <NetWorkDelegate, TableViewCellInteractionDelegate> {
     NSMutableArray *_fansListArr;
@@ -228,6 +229,11 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    // dick test
+//    CompleteInfoGuideViewController *vc = [[CompleteInfoGuideViewController alloc] init];
+//    [self.navigationController pushViewController:vc animated:YES];
+//    return;
+    
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     SimpleUserInfoModel *userModel = [_fansListArr objectAtIndex:indexPath.row];
     [self performSegueWithIdentifier:IdentifierUserMainPage sender:userModel];

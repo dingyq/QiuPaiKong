@@ -84,7 +84,7 @@
         
         _lineView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kFrameWidth, 0.5f)];
         [_lineView setBackgroundColor:LineViewColor];
-        [self.contentView addSubview:_lineView];
+        [_cBgView addSubview:_lineView];
     }
     return self;
 }
@@ -127,7 +127,7 @@
     [self.myDelegate gotoBuyGoods:_infoModel.name goodsId:_infoModel.goodsId goodsUrl:sellUrl];
 }
 
-- (void)showLoadMoreTip:(NSString *)tip {
+- (void)showLoadMoreTip:(GoodsSearchType)searchType {
     UIView *bgView = [self.contentView viewWithTag:TIP_TAG];
     if (!bgView) {
         UILabel *tipLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, kFrameWidth, 29.5f)];
@@ -147,11 +147,36 @@
         [bgView addSubview:lineView];
         [bgView setTag:TIP_TAG];
         [self.contentView addSubview:bgView];
+        
+        UIButton *loadBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [loadBtn setFrame:CGRectMake(0, 0, CGRectGetWidth(bgView.frame), CGRectGetHeight(bgView.frame))];
+        [bgView addSubview:loadBtn];
+        [loadBtn mas_makeConstraints:^(MASConstraintMaker *make){
+            make.top.equalTo(@(0));
+            make.left.equalTo(@(0));
+            make.width.equalTo(@(bgView.frame.size.width));
+            make.height.equalTo(@(bgView.frame.size.height));
+        }];
+        [loadBtn addTarget:self action:@selector(loadMoreData:) forControlEvents:UIControlEventTouchUpInside];
     }
     [_cBgView setHidden:YES];
     [bgView setHidden:NO];
     UILabel *tipL = [bgView viewWithTag:112];
-    [tipL setText:tip];
+    if (searchType == GoodsSearchType_Racket) {
+        [tipL setText:@"查看更多球拍"];
+    } else if (searchType == GoodsSearchType_RacketLine) {
+        [tipL setText:@"查看更多球线"];
+    }
 }
 
+- (void)loadMoreData:(UIButton *)sender {
+    NSLog(@"loadMoreData");
+    UIView *bgView = [self.contentView viewWithTag:TIP_TAG];
+    UILabel *tipL = [bgView viewWithTag:112];
+    if ([[tipL text] isEqualToString:@"查看更多球拍"]) {
+        [self.myDelegate loadMoreSearchData:GoodsSearchType_Racket];
+    } else if ([[tipL text] isEqualToString:@"查看更多球线"]) {
+        [self.myDelegate loadMoreSearchData:GoodsSearchType_RacketLine];
+    }
+}
 @end

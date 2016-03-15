@@ -24,6 +24,7 @@
 + (RequestInfo *)sendUserShareRequest:(NSDictionary *)requestInfo; // 发送用户分享的请求
 + (RequestInfo *)getAttentionedOrFansUsersList:(NSDictionary *)requestInf; // 获取我关注的和关注我的用户
 + (RequestInfo *)getGoodsSearchList:(NSDictionary *)requestInfo; // 搜索商品列表
++ (RequestInfo *)getHotSearchWordsList:(NSDictionary *)requestInfo; // 获取搜索热词列表
 + (RequestInfo *)sendUploadImageRequest:(UIImage *)image fileName:(NSString *)fileName; // 上传图片
 + (RequestInfo *)getPreciseSelectInfo:(NSDictionary *)requestInfo; // 请求精选信息
 + (RequestInfo *)getCircleInfo:(NSDictionary *)requestInfo; // 请求圈子信息

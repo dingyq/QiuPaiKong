@@ -190,5 +190,6 @@ static NSString *kShareThumbImage = @"share_thumb_image_generate.jpg";
 #define IdentifierFindPwdVC @"toFindPwdVC"
 
 #define IdentifierPrivatePolicyVC @"toPrivatePolicyVC"
+#define IdentifierCompleteInfoGuideVC @"completeInfoGuideVC"
 
 #endif /* utilityVar_h */

@@ -10,6 +10,7 @@
 #import "DDRemoteSearchBar.h"
 #import "RacketSearchModel.h"
 #import "SearchResultCell.h"
+#import "HotSearchWordsView.h"
 
 #import "GoodsDetailAndEvaViewController.h"
 #import "SpecialTopicViewController.h"
@@ -17,35 +18,48 @@
 
 @interface SearchViewController()<UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, DDRemoteSearchBarDelegate, NetWorkDelegate, TableViewCellInteractionDelegate> {
     UITableView *_resultTableView;
+    HotSearchWordsView *_hotWordsView;
     
     BOOL _isFirstLoaded;
-    BOOL _loadMoreRacketClick;
-    BOOL _loadMoreRacketLineClick;
+    GoodsSearchType _loadMoreType;
+    BOOL _isLoadMoreClick;
 }
 @property (strong, nonatomic) DDRemoteSearchBar *searchBar;
-@property (strong, nonatomic) NSMutableArray  *searchList;
+@property (strong, nonatomic) NSArray *searchList;
 @property (strong, nonatomic) NSString *keyWords;
-
+@property (copy, nonatomic) NSArray *hotWordsArr;
 
 @end
 
 @implementation SearchViewController
 
-@synthesize searchPlaceholder;
-@synthesize searchList = _searchList;
+static const NSInteger pageCount = 10;
 
 - (NSString *)keyWords {
     return _keyWords?_keyWords:@"";
 }
 
+- (NSArray *)searchList {
+    if (!_searchList) {
+        _searchList = [NSArray arrayWithObjects:[NSArray array], [NSArray array], nil];
+    }
+    return _searchList;
+}
+
+- (NSMutableArray *)copyFromSearchList {
+    NSMutableArray *tmpArr = [[NSMutableArray alloc] init];
+    for (NSArray *arr in self.searchList) {
+        NSMutableArray *arrM = [[NSMutableArray alloc] initWithArray:arr];
+        [tmpArr addObject:arrM];
+    }
+    return tmpArr;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.searchList = [[NSMutableArray alloc] init];
     _isFirstLoaded = YES;
-    
-    _loadMoreRacketClick = NO;
-    _loadMoreRacketLineClick = NO;
+    _isLoadMoreClick = NO;
     
     [self initSearchBar];
     [self initResultTableView];
@@ -60,6 +74,7 @@
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     if (_isFirstLoaded) {
+        [self sendGetHotSearchWordsList];
         [_searchBar becomeFirstResponder];
         _isFirstLoaded = NO;
     }
@@ -111,19 +126,6 @@
 //    _searchBar.timeToWait = 1;
 }
 
-//- (void)addRefreshView:(UITableView *)tableView {
-//    __weak __typeof(self)weakSelf = self;
-//    tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
-////        [weakSelf getSpecialTopicDetail:GetInfoTypeRefresh sortId:0];
-//    }];
-//    // 设置自动切换透明度(在导航栏下面自动隐藏)
-//    tableView.mj_header.automaticallyChangeAlpha = YES;
-//    // 上拉刷新
-//    tableView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingBlock:^{
-////        [weakSelf getSpecialTopicDetail:GetInfoTypePull sortId:weakSelf.oldestSortId];
-//    }];
-//}
-
 - (void)initResultTableView {
     _resultTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, kFrameWidth, kFrameHeight) style:UITableViewStylePlain];
     _resultTableView.delegate = self;
@@ -134,27 +136,67 @@
     UIView *footerView = [[UIView alloc] init];
     _resultTableView.tableFooterView = footerView;
     [footerView setBackgroundColor:[UIColor clearColor]];
-//    [self addRefreshView:_resultTableView];
+}
+
+- (void)reloadSearchTableView {
+    [self showHotSearchWordsMiddleView:NO];
+    [_resultTableView reloadData];
+}
+
+- (void)showHotSearchWordsMiddleView:(BOOL)show {
+    if (!_hotWordsView) {
+        _hotWordsView = [[HotSearchWordsView alloc] initWithFrame:CGRectMake(0, 0, kFrameWidth, kFrameHeight)];
+        [_hotWordsView setBackgroundColor:[UIColor whiteColor]];
+        _hotWordsView.myDelegate = self;
+        [self.view addSubview:_hotWordsView];
+    }
+    if (show) {
+        [_hotWordsView initHotWordsBtn:_hotWordsArr];
+    }
+    
+    [_hotWordsView setHidden:!show];
+    [_resultTableView setHidden:show];
+}
+
+- (void)sendGetHotSearchWordsList {
+    NSMutableDictionary *paramDic = [[NSMutableDictionary alloc] init];
+    [paramDic setObject:@(HotSearchWordsTypeHistory) forKey:@"staType"];
+    [paramDic setObject:[NSNumber numberWithInteger:self.searchType] forKey:@"goodsType"];
+    RequestInfo *info = [HttpRequestManager getHotSearchWordsList:paramDic];
+    info.delegate = self;
 }
 
 - (void)sendSearchGoodsRequest:(NSString *)goodsKeyWord {
+    self.keyWords = goodsKeyWord;
+    _isLoadMoreClick = NO;
     NSMutableDictionary *paramDic = [[NSMutableDictionary alloc] init];
-    [paramDic setObject:goodsKeyWord forKey:@"keyword"];
+    [paramDic setObject:self.keyWords forKey:@"keyword"];
     [paramDic setObject:[NSNumber numberWithInteger:self.searchType] forKey:@"type"];
     RequestInfo *info = [HttpRequestManager getGoodsSearchList:paramDic];
     info.delegate = self;
 }
 
 # pragma mark - DDRemoteSearchBarDelegate
--(void)remoteSearchBar:(DDRemoteSearchBar *)searchBar textDidChange:(NSString *)searchText {
+
+- (void)remoteSearchBar:(DDRemoteSearchBar *)searchBar textDidChange:(NSString *)searchText {
     if ([searchText lengthOfBytesUsingEncoding:NSUTF8StringEncoding] > 3) {
         NSLog(@"searchText is %@", searchText);
-        self.keyWords = searchText;
         [self sendSearchGoodsRequest:searchText];
+    } else if([searchText lengthOfBytesUsingEncoding:NSUTF8StringEncoding] == 0) {
+        if (!_isFirstLoaded) {
+            [self showHotSearchWordsMiddleView:YES];
+        }
     }
 }
 
 #pragma -mark TableViewCellInteractionDelegate
+- (void)hotSearchWordsBtnClick:(NSString *)hotWords {
+    [self.searchBar resignFirstResponder];
+    self.keyWords = hotWords;
+    [_searchBar setText:hotWords];
+    [self sendSearchGoodsRequest:hotWords];
+}
+
 - (void)gotoBuyGoods:(NSString *)goodsName goodsId:(NSInteger)goodsId goodsUrl:(NSString *)goodsUrl {
     [Helper uploadGotoBuyPageDataToUmeng:goodsName goodsId:goodsId];
     GoodsBuyViewController *vc = [[GoodsBuyViewController alloc] init];
@@ -162,6 +204,41 @@
     vc.title = goodsName;
     vc.pageHtmlUrl = goodsUrl;
     [self.navigationController pushViewController:vc animated:YES];
+}
+
+- (NSInteger)getLastId:(GoodsSearchType)searchType {
+    switch (searchType) {
+        case GoodsSearchType_Racket:
+        {
+            NSArray *racketArr = [self.searchList objectAtIndex:0];
+            if (racketArr.count> 0) {
+                return [((RacketSearchModel *)[racketArr lastObject]) goodsId];
+            }
+        }
+            break;
+        case GoodsSearchType_RacketLine:
+        {
+            NSArray *racketLineArr = [self.searchList objectAtIndex:1];
+            if (racketLineArr.count> 0) {
+                return [((RacketSearchModel *)[racketLineArr lastObject]) goodsId];
+            }
+        }
+            break;
+        default:
+            break;
+    }
+    return 0;
+}
+
+- (void)loadMoreSearchData:(GoodsSearchType)searchType {
+    _isLoadMoreClick = YES;
+    _loadMoreType = searchType;
+    NSMutableDictionary *paramDic = [[NSMutableDictionary alloc] init];
+    [paramDic setObject:self.keyWords forKey:@"keyword"];
+    [paramDic setObject:@([self getLastId:searchType]) forKey:@"lastId"];
+    [paramDic setObject:[NSNumber numberWithInteger:searchType] forKey:@"type"];
+    RequestInfo *info = [HttpRequestManager getGoodsSearchList:paramDic];
+    info.delegate = self;
 }
 
 #pragma mark -UIScrollViewDelegate
@@ -176,11 +253,9 @@
     NSArray *itemsArr = [self.searchList objectAtIndex:indexPath.section];
     NSInteger rowCount = [itemsArr count];
     NSInteger row = [indexPath row];
-    NSInteger section = [indexPath section];
-    if (rowCount > 10 && row >=10) {
-        if (section == 0 && !_loadMoreRacketClick) {
-            return 30.0f;
-        } else if (section == 1 && !_loadMoreRacketLineClick) {
+
+    if (row >= rowCount) {
+        if (rowCount%pageCount == 0) {
             return 30.0f;
         }
     }
@@ -229,17 +304,17 @@
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
-    if (_searchType == GoodsSearchType_All) {
-
-    }
-    
     return nil;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
     if (_searchType == GoodsSearchType_All) {
-        if (section == 0 && [[self.searchList objectAtIndex:1] count] > 0) {
-            return 5.0f;
+        if (section == 0 && [[self.searchList objectAtIndex:0] count] > 0) {
+            if (self.searchList.count > 1) {
+                if ([[self.searchList objectAtIndex:1] count] > 0) {
+                    return 5.0f;
+                }
+            }
         }
     }
     return 0.0f;
@@ -253,10 +328,8 @@
 //设置区域的行数
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     NSInteger rowCount = [[self.searchList objectAtIndex:section] count];
-    if (rowCount > 10) {
-        if ((!_loadMoreRacketClick && section == 0) || (!_loadMoreRacketClick && section == 1)) {
-            return 10+1;
-        }
+    if (rowCount != 0 && rowCount%pageCount == 0) {
+        return rowCount + 1;
     }
     return rowCount;
 }
@@ -276,17 +349,34 @@
     if (cell == nil) {
         cell = [[SearchResultCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:flag];
     }
-    RacketSearchModel *tmpModel = [itemsArr objectAtIndex:indexPath.row];
-    [cell bindCellWithDataModel:tmpModel showBuyBtn:shouldShowBuyBtn];
-    cell.myDelegate = self;
 
     NSInteger rowCount = [[self.searchList objectAtIndex:section] count];
-    if (rowCount > 10 && row >=10) {
-        if (section == 0 && !_loadMoreRacketClick) {
-            [cell showLoadMoreTip:@"查看更多球拍"];
-        } else if (section == 1 && !_loadMoreRacketLineClick) {
-            [cell showLoadMoreTip:@"查看更多球线"];
+    if (row >= rowCount) {
+        switch (_searchType) {
+            case GoodsSearchType_All:
+                if (section == 0) {
+                    [cell showLoadMoreTip:GoodsSearchType_Racket];
+                } else if (section == 1) {
+                    [cell showLoadMoreTip:GoodsSearchType_RacketLine];
+                }
+                break;
+            case GoodsSearchType_Racket:
+            {
+                [cell showLoadMoreTip:GoodsSearchType_Racket];
+            }
+                break;
+            case GoodsSearchType_RacketLine:
+            {
+                [cell showLoadMoreTip:GoodsSearchType_RacketLine];
+            }
+                break;
+            default:
+                break;
         }
+    } else {
+        RacketSearchModel *tmpModel = [itemsArr objectAtIndex:indexPath.row];
+        [cell bindCellWithDataModel:tmpModel showBuyBtn:shouldShowBuyBtn];
+        cell.myDelegate = self;
     }
     return cell;
 }
@@ -314,59 +404,84 @@
 #pragma -mark UISearchBarDelegate
 
 - (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar{
-    NSLog(@"搜索Begin");
-    [self sendSearchGoodsRequest:@""];
     return YES;
 }
 
 - (BOOL)searchBarShouldEndEditing:(UISearchBar *)searchBar{
-    NSLog(@"搜索End");
-//    [self.navigationController popViewControllerAnimated:YES];
     return YES;
 }
 
 #pragma -mark NetWorkDelegate
 - (void)netWorkFinishedCallBack:(NSDictionary *)dic withRequestID:(NetWorkRequestID)requestID {
     [self.netIndicatorView hide];
-    
     if (RequestID_SearchGoodsList == requestID) {
         NSDictionary *returnData = [dic objectForKey:@"returnData"];
         if ([[dic objectForKey:@"statusCode"] integerValue] == NetWorkJsonResOK) {
-            [self.searchList removeAllObjects];
-            if (_searchType == GoodsSearchType_All) {
-                // 球拍
-                NSArray *racketResult = [returnData objectForKey:@"goodsData_1"];
-                NSMutableArray *racketItemArr = [[NSMutableArray alloc] init];
-                for (NSDictionary *itemDic in racketResult) {
-                    RacketSearchModel *tmpModel = [[RacketSearchModel alloc] initWithAttributes:itemDic];
-                    [racketItemArr addObject:tmpModel];
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                NSMutableArray *searchArr;
+                if (_searchType == GoodsSearchType_All) {
+                    if (!_isLoadMoreClick) {
+                        searchArr = [[NSMutableArray alloc] init];
+                        // 球拍
+                        NSArray *racketResult = [returnData objectForKey:@"goodsData_1"];
+                        NSMutableArray *racketItemArr = [[NSMutableArray alloc] init];
+                        for (NSDictionary *itemDic in racketResult) {
+                            RacketSearchModel *tmpModel = [[RacketSearchModel alloc] initWithAttributes:itemDic];
+                            [racketItemArr addObject:tmpModel];
+                        }
+                        [searchArr addObject:racketItemArr];
+                        
+                        // 球线
+                        NSMutableArray *racketLineItemArr = [[NSMutableArray alloc] init];
+                        NSArray *racketLineResult = [returnData objectForKey:@"goodsData_2"];
+                        for (NSDictionary *itemDic in racketLineResult) {
+                            RacketSearchModel *tmpModel = [[RacketSearchModel alloc] initWithAttributes:itemDic];
+                            [racketLineItemArr addObject:tmpModel];
+                        }
+                        [searchArr addObject:racketLineItemArr];
+                    } else {
+                        searchArr = [self copyFromSearchList];
+                        NSInteger index = _loadMoreType == GoodsSearchType_Racket ? 0 : 1;
+                        NSMutableArray *itemArr = [searchArr objectAtIndex:index];
+                        NSArray *loadResult = [returnData objectForKey:@"goodsData"];
+                        for (NSDictionary *itemDic in loadResult) {
+                            RacketSearchModel *tmpModel = [[RacketSearchModel alloc] initWithAttributes:itemDic];
+                            [itemArr addObject:tmpModel];
+                        }
+                    }
+                } else {
+                    if (!_isLoadMoreClick) {
+                        searchArr = [[NSMutableArray alloc] init];
+                        NSArray *searchResult = [returnData objectForKey:@"goodsData"];
+                        NSMutableArray *itemArr = [[NSMutableArray alloc] init];
+                        for (NSDictionary *itemDic in searchResult) {
+                            RacketSearchModel *tmpModel = [[RacketSearchModel alloc] initWithAttributes:itemDic];
+                            [itemArr addObject:tmpModel];
+                        }
+                        [searchArr addObject:itemArr];
+                        
+                    } else {
+                        searchArr = [self copyFromSearchList];
+                        NSInteger index = _loadMoreType == GoodsSearchType_Racket ? 0 : 1;
+                        NSMutableArray *itemArr = [searchArr objectAtIndex:index];
+                        NSArray *loadResult = [returnData objectForKey:@"goodsData"];
+                        for (NSDictionary *itemDic in loadResult) {
+                            RacketSearchModel *tmpModel = [[RacketSearchModel alloc] initWithAttributes:itemDic];
+                            [itemArr addObject:tmpModel];
+                        }
+                    }
                 }
-//                if ([racketItemArr count] > 0) {
-                    [self.searchList addObject:racketItemArr];
-//                }
-                
-                // 球线
-                NSArray *racketLineResult = [returnData objectForKey:@"goodsData_2"];
-                NSMutableArray *racketLineItemArr = [[NSMutableArray alloc] init];
-                for (NSDictionary *itemDic in racketLineResult) {
-                    RacketSearchModel *tmpModel = [[RacketSearchModel alloc] initWithAttributes:itemDic];
-                    [racketLineItemArr addObject:tmpModel];
-                }
-//                if ([racketLineItemArr count] > 0) {
-                    [self.searchList addObject:racketLineItemArr];
-//                }
-                
-            } else {
-                NSArray *searchResult = [returnData objectForKey:@"goodsData"];
-                NSMutableArray *goodsItemArr = [[NSMutableArray alloc] init];
-                for (NSDictionary *itemDic in searchResult) {
-                    RacketSearchModel *tmpModel = [[RacketSearchModel alloc] initWithAttributes:itemDic];
-                    [goodsItemArr addObject:tmpModel];
-                }
-                [self.searchList addObject:goodsItemArr];
-            }
-            
-            [_resultTableView reloadData];
+                self.searchList = [NSArray arrayWithArray:searchArr];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self reloadSearchTableView];
+                });
+            });
+        }
+    } else if (RequestID_GetHotSearchWords == requestID) {
+        NSDictionary *returnData = [dic objectForKey:@"returnData"];
+        if ([[dic objectForKey:@"statusCode"] integerValue] == NetWorkJsonResOK) {
+            _hotWordsArr = [NSArray arrayWithArray:[returnData objectForKey:@"keyword"]];
+            [self showHotSearchWordsMiddleView:YES];
         }
     }
 }

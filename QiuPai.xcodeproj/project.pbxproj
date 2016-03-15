@@ -14,6 +14,9 @@
 		E33D62C31C184A95005C53F5 /* STCommentModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E33D62C21C184A95005C53F5 /* STCommentModel.m */; };
 		E33D62C61C184C79005C53F5 /* STDetailModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E33D62C51C184C79005C53F5 /* STDetailModel.m */; };
 		E33D62C91C189714005C53F5 /* STCommentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E33D62C81C189714005C53F5 /* STCommentCell.m */; };
+		E33EFDDC1C9577EF000C8C34 /* HotSearchWordsView.m in Sources */ = {isa = PBXBuildFile; fileRef = E33EFDDB1C9577EF000C8C34 /* HotSearchWordsView.m */; };
+		E33EFDDF1C95863A000C8C34 /* CompleteInfoGuideViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E33EFDDE1C95863A000C8C34 /* CompleteInfoGuideViewController.m */; };
+		E33EFDE21C958A29000C8C34 /* CompleteInfoGuideView.m in Sources */ = {isa = PBXBuildFile; fileRef = E33EFDE11C958A29000C8C34 /* CompleteInfoGuideView.m */; };
 		E33F0AE11C4DCD930057445C /* RegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E33F0AE01C4DCD930057445C /* RegisterViewController.m */; };
 		E33F0AEF1C4E33400057445C /* libicucore.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = E33F0AEE1C4E33400057445C /* libicucore.tbd */; };
 		E33F0AF31C4E4A0E0057445C /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E33F0AF21C4E4A0E0057445C /* JavaScriptCore.framework */; };
@@ -385,6 +388,12 @@
 		E33D62C51C184C79005C53F5 /* STDetailModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STDetailModel.m; sourceTree = "<group>"; };
 		E33D62C71C189714005C53F5 /* STCommentCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STCommentCell.h; sourceTree = "<group>"; };
 		E33D62C81C189714005C53F5 /* STCommentCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STCommentCell.m; sourceTree = "<group>"; };
+		E33EFDDA1C9577EF000C8C34 /* HotSearchWordsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HotSearchWordsView.h; sourceTree = "<group>"; };
+		E33EFDDB1C9577EF000C8C34 /* HotSearchWordsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HotSearchWordsView.m; sourceTree = "<group>"; };
+		E33EFDDD1C95863A000C8C34 /* CompleteInfoGuideViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompleteInfoGuideViewController.h; sourceTree = "<group>"; };
+		E33EFDDE1C95863A000C8C34 /* CompleteInfoGuideViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CompleteInfoGuideViewController.m; sourceTree = "<group>"; };
+		E33EFDE01C958A29000C8C34 /* CompleteInfoGuideView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompleteInfoGuideView.h; sourceTree = "<group>"; };
+		E33EFDE11C958A29000C8C34 /* CompleteInfoGuideView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CompleteInfoGuideView.m; sourceTree = "<group>"; };
 		E33F0ADF1C4DCD930057445C /* RegisterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegisterViewController.h; sourceTree = "<group>"; };
 		E33F0AE01C4DCD930057445C /* RegisterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegisterViewController.m; sourceTree = "<group>"; };
 		E33F0AEE1C4E33400057445C /* libicucore.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libicucore.tbd; path = usr/lib/libicucore.tbd; sourceTree = SDKROOT; };
@@ -1646,6 +1655,8 @@
 				E3E33D741C50EE28003F305E /* FindPwdViewController.m */,
 				E39C72231C58ACA60021EFEF /* H5ViewController.h */,
 				E39C72241C58ACA60021EFEF /* H5ViewController.m */,
+				E33EFDDD1C95863A000C8C34 /* CompleteInfoGuideViewController.h */,
+				E33EFDDE1C95863A000C8C34 /* CompleteInfoGuideViewController.m */,
 			);
 			path = Login;
 			sourceTree = "<group>";
@@ -1736,6 +1747,8 @@
 				E3566C6A1C1C39E900DFC8B2 /* SettingCell.m */,
 				E3BED0F61C2659FE0064DDE1 /* DDPlayYearPickerView.h */,
 				E3BED0F71C2659FE0064DDE1 /* DDPlayYearPickerView.m */,
+				E33EFDE01C958A29000C8C34 /* CompleteInfoGuideView.h */,
+				E33EFDE11C958A29000C8C34 /* CompleteInfoGuideView.m */,
 			);
 			path = Me;
 			sourceTree = "<group>";
@@ -1749,6 +1762,8 @@
 				E3C5F74C1C13487E00A2ABFB /* SearchResultCell.m */,
 				E33D62C71C189714005C53F5 /* STCommentCell.h */,
 				E33D62C81C189714005C53F5 /* STCommentCell.m */,
+				E33EFDDA1C9577EF000C8C34 /* HotSearchWordsView.h */,
+				E33EFDDB1C9577EF000C8C34 /* HotSearchWordsView.m */,
 			);
 			path = PreciseSelect;
 			sourceTree = "<group>";
@@ -2509,6 +2524,8 @@
 				E39798D41C3FE6ED0019733C /* MJRefreshBackGifFooter.m in Sources */,
 				E3BF5FEF1BFF0826008BA403 /* ZLPhotoPickerCollectionViewCell.m in Sources */,
 				E3BF5FD71BFF0826008BA403 /* DACircularProgressView.m in Sources */,
+				E33EFDDF1C95863A000C8C34 /* CompleteInfoGuideViewController.m in Sources */,
+				E33EFDE21C958A29000C8C34 /* CompleteInfoGuideView.m in Sources */,
 				E3F72A131BE8CB6900DAB891 /* UIImageView+WebCache.m in Sources */,
 				E3E7975A1BF36FD200E0B2B0 /* QiuPaiUserModel.m in Sources */,
 				E3F729D51BE8713300DAB891 /* UIProgressView+AFNetworking.m in Sources */,
@@ -2544,6 +2561,7 @@
 				E35C061B1C4A273500C9E69E /* MASViewConstraint.m in Sources */,
 				E35C061C1C4A273500C9E69E /* NSArray+MASAdditions.m in Sources */,
 				E33F0AE11C4DCD930057445C /* RegisterViewController.m in Sources */,
+				E33EFDDC1C9577EF000C8C34 /* HotSearchWordsView.m in Sources */,
 				E3C5F7501C13F05E00A2ABFB /* GoodsDetailAndEvaluModel.m in Sources */,
 				E35D93C91C22A86A00B54E98 /* WXApiRequestHandler.m in Sources */,
 				E3A6A6471C26B30E007D1C49 /* ModifyNickViewController.m in Sources */,

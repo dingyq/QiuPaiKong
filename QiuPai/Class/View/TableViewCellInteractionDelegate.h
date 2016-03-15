@@ -25,6 +25,7 @@
 - (void)loadMoreSubEvalution;
 - (void)getTagGoodsRequest:(NSInteger)goodsId name:(NSString *)goodsName brand:(NSString *)goodsBrand evaluNum:(NSInteger)evaluNum;
 
+- (void)loadMoreSearchData:(GoodsSearchType)searchType;
 
-
+- (void)hotSearchWordsBtnClick:(NSString *)hotWords;
 @end

@@ -9,6 +9,12 @@
 #ifndef NetWorkConstants_h
 #define NetWorkConstants_h
 
+
+typedef NS_ENUM(NSInteger, UserLoginState) {
+    UserLoginNotFirst = 0,
+    UserLoginFirst = 1,
+};
+
 //状态：0正常登录1微信token超时2本地authkey需要刷新3用户不存在(使用authkey校验时)4用户不存在(验证码登录的方式) 5验证码错误
 typedef NS_ENUM(NSInteger, LoginFlag) {
     LoginFlag_Success = 0,
@@ -70,6 +76,14 @@ typedef NS_ENUM(NSInteger, ConcernedState){
     ConcernedState_None = 0,
     ConcernedState_Attentioned = 1,
     ConcernedState_HuFen = 2,
+};
+
+// 搜索热词类型
+typedef NS_ENUM(NSInteger, HotSearchWordsType){
+    HotSearchWordsTypeToday = 1,
+    HotSearchWordsTypeWeek = 2,
+    HotSearchWordsTypeMonth = 3,
+    HotSearchWordsTypeHistory = 4,
 };
 
 // 商品搜索类型
@@ -150,6 +164,7 @@ typedef NS_ENUM(NSInteger, NetWorkRequestID){
     RequestID_PublishNewEvaluation,
     RequestID_UploadImage,
     RequestID_SearchGoodsList,
+    RequestID_GetHotSearchWords,
     RequestID_SendUserCollect,
     RequestID_SendUserShare,
     RequestID_SendUserAttention,

@@ -14,6 +14,10 @@ typedef void(^Step2CallBackBlock)(NSString *tipStr);
 
 @optional
 
+- (void)selfEvalueBtnClick:(Step2CallBackBlock)callBack;
+
+- (void)racketUsedBtnClick:(Step2CallBackBlock)callBack;
+
 - (void)racketChooseDone:(NSString *)racketName;
 
 - (void)nickNameModify:(NSString *)nickName;

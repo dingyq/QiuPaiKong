@@ -11,6 +11,7 @@
 #import "PwdLoginViewController.h"
 #import "QQSdkCall.h"
 #import "H5ViewController.h"
+#import "CompleteInfoGuideViewController.h"
 
 @interface LoginInViewController() <NetWorkDelegate, WXApiManagerDelegate, WBApiManagerDelegate, UITextFieldDelegate> {
     UITextField *_telePhoneInput;
@@ -92,6 +93,9 @@
         [vc.navigationController setNavigationBarHidden:NO animated:NO];
         DDNavigationController* nav = [[DDNavigationController alloc] initWithRootViewController:vc];
         [self presentViewController:nav animated:YES completion:nil];
+    } else if ([IdentifierCompleteInfoGuideVC isEqualToString:identifier]) {
+        CompleteInfoGuideViewController *vc = [[CompleteInfoGuideViewController alloc] init];
+        [self.navigationController pushViewController:vc animated:YES];
     }
 }
 
@@ -230,6 +234,7 @@
 }
 
 - (void)getCodeBtnClick:(UIButton *)sender {
+    
     NSString *phoneNum = _telePhoneInput.text;
     if ([phoneNum isEqualToString:@""]) {
         [self loadingTipView:@"请输入手机号" callBack:nil];
@@ -482,7 +487,15 @@
                 NSLog(@"登录成功");
                 [self loadingViewDismiss];
                 [[QiuPaiUserModel getUserInstance] updateWithDic:dataDic];
-                [self backBtnClick:nil];
+                UserLoginState isFirstLogin = [[dataDic objectForKey:@"isFirstLogin"] integerValue];
+                if (isFirstLogin == UserLoginFirst) {
+                    // 用户首次登录时，跳到新用户资料完善页
+                    // 只有第三方登录的用户才会走这里的逻辑，手机号首次验证码登录会要求先完善用户名与密码
+                    // 第三方首次登录的用户直接完善个人资料
+                    [self performSegueWithIdentifier:IdentifierCompleteInfoGuideVC sender:nil];
+                } else {
+                    [self backBtnClick:nil];
+                }
             } else if (logFlag == LoginFlag_Error_PhoneNum) {
                 [self loadingTipView:@"手机号不正确" callBack:nil];
             } else {

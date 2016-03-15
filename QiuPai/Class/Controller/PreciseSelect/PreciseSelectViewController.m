@@ -236,6 +236,7 @@
     } else if ([identifier isEqualToString:IdentifierGoodsSearch]) {
         SearchViewController *searchVC = [[SearchViewController alloc] init];
         searchVC.hidesBottomBarWhenPushed = YES;
+        searchVC.searchType = GoodsSearchType_All;
         searchVC.searchPlaceholder = @"搜索装备";
         [self.navigationController pushViewController:searchVC animated:YES];
     }
